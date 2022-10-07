@@ -3,21 +3,11 @@ import 'package:get/get.dart';
 class AddProductController extends GetxController {
   //TODO: Implement AddProductController
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
+  final entryType = EntryType.raw.obs;
 
-  @override
-  void onReady() {
-    super.onReady();
+  changeEntryType(EntryType type) {
+    if (entryType.value != type) entryType.value = type;
   }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }
+
+enum EntryType { designed, raw }

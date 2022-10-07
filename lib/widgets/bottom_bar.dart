@@ -93,7 +93,9 @@ class BottomBar extends GetWidget<HomeController> {
         return Container(
           color: Colors.transparent,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          child: Image.asset("assets/bottom_bar_icons/${icon}1.png"),
+          child: Image.asset(
+            "assets/bottom_bar_icons/${icon}1.png",
+          ),
         );
       }),
     );
