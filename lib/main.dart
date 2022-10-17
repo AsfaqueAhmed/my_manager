@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:my_manager/routes.dart';
+import 'package:my_manager/screens/404/ui/404.dart';
 import 'package:my_manager/services/design_service.dart';
 import 'package:my_manager/services/firebase_services.dart';
 import 'package:my_manager/services/order_service.dart';
@@ -21,6 +22,10 @@ void main() async {
       ),
       initialRoute: Routes.home,
       getPages: Pages.routes,
+      unknownRoute: GetPage(
+        name: Routes.unknown,
+        page: () => const NotFound404(),
+      ),
     ),
   );
 }

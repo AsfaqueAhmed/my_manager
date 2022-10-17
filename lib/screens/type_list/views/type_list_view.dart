@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../controllers/design_list_controller.dart';
+import '../controllers/type_list_controller.dart';
 
-class DesignListView extends GetView<DesignListController> {
-  const DesignListView({Key? key}) : super(key: key);
+class TypeListView extends GetView<TypeListController> {
+  const TypeListView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('DesignListView'),
+        title: const Text('TypeListView'),
         centerTitle: true,
       ),
       body: Center(
         child: Text(
-          'DesignListView is working',
+          'TypeListView is working',
           style: TextStyle(fontSize: 20),
         ),
       ),

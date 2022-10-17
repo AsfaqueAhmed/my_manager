@@ -8,12 +8,10 @@ class DesignList extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: const [
-          AppTopBar(title: "Design List"),
-        ],
-      ),
+    return Column(
+      children: const [
+        AppTopBar(title: "Material List"),
+      ],
     );
   }
 }

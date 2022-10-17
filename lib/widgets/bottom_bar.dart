@@ -18,7 +18,9 @@ class BottomBar extends GetWidget<HomeController> {
                 left: controller.selectedPage.value == 0 ? 200 : 300),
             //left: controller.selectedPage.value == 0 ? MediaQuery.of(context).size.width/2 : MediaQuery.of(context).size.width/2-40,
             child: GestureDetector(
-              onTap: controller.selectedPage.value != 0 ? controller.add : null,
+              onTap: controller.selectedPage.value != 0
+                  ? controller.addNewItem
+                  : null,
               child: AppContainer(
                 height: 68,
                 width: 68,

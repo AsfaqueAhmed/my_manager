@@ -20,7 +20,7 @@ class HomeController extends GetConnect {
     }
   }
 
-  void add() {
+  void addNewItem() {
     if (selectedPage.value == 2) Get.toNamed(Routes.addDesign);
     if (selectedPage.value == 1) Get.toNamed(Routes.addProduct);
   }

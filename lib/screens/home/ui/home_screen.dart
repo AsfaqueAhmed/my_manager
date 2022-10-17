@@ -6,6 +6,7 @@ import 'package:my_manager/screens/home/ui/pages/design_list.dart';
 import 'package:my_manager/screens/home/ui/pages/order_list.dart';
 import 'package:my_manager/screens/home/ui/pages/product_list.dart';
 import 'package:my_manager/widgets/bottom_bar.dart';
+import 'package:my_manager/widgets/drawer.dart';
 
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({Key? key}) : super(key: key);
@@ -35,6 +36,7 @@ class HomeScreen extends GetView<HomeController> {
           ),
         ],
       ),
+      drawer: ApplicationDrawer(),
     );
   }
 }

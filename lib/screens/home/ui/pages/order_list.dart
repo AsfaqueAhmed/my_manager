@@ -8,12 +8,10 @@ class OrderList extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: const [
-          AppTopBar(title: "Oder List"),
-        ],
-      ),
-    );
+    return Column(
+      children: const [
+        AppTopBar(title: "Oder List"),
+      ],
+    ) ;
   }
 }

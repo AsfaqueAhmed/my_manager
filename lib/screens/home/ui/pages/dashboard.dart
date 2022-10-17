@@ -8,12 +8,10 @@ class Dashboard extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: const [
-          AppTopBar(title: "Dashboard"),
-        ],
-      ),
+    return  Column(
+      children: const [
+        AppTopBar(title: "Dashboard",hasDrawer:true),
+      ],
     );
   }
 }

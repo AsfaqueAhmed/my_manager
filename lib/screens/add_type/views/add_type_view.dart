@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../controllers/add_design_controller.dart';
+import '../controllers/add_type_controller.dart';
 
-class AddDesignView extends GetView<AddDesignController> {
-  const AddDesignView({Key? key}) : super(key: key);
+class AddTypeView extends GetView<AddTypeController> {
+  const AddTypeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AddDesignView'),
+        title: const Text('AddTypeView'),
         centerTitle: true,
       ),
       body: Center(
         child: Text(
-          'AddDesignView is working',
+          'AddTypeView is working',
           style: TextStyle(fontSize: 20),
         ),
       ),
