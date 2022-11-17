@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_manager/routes.dart';
 import 'package:my_manager/screens/404/ui/404.dart';
 import 'package:my_manager/services/design_service.dart';
@@ -16,10 +17,7 @@ void main() async {
   runApp(
     GetMaterialApp(
       color: LightThemeColor.primaryColor,
-      theme: ThemeData.light(useMaterial3: true).copyWith(
-        primaryColor: LightThemeColor.primaryColor,
-        appBarTheme: const AppBarTheme(color: LightThemeColor.primaryColor),
-      ),
+      theme: LightThemeColor.theme,
       initialRoute: Routes.home,
       getPages: Pages.routes,
       unknownRoute: GetPage(
@@ -32,7 +30,7 @@ void main() async {
 
 void initServices() async {
   await Get.put(FirebaseService()).init();
-  GetStorage.init("my_manager");
+  GetStorage.init();
   Get.lazyPut(() => ProductService());
   Get.lazyPut(() => OrderService());
   Get.lazyPut(() => DesignService());
