@@ -1,3 +1,4 @@
+import 'package:my_manager/models/source.dart';
 import 'package:uuid/uuid.dart';
 
 class RawSari {
@@ -9,19 +10,19 @@ class RawSari {
   bool? tercell;
 
   List<String>? images;
-  String? source;
+  Source? source;
 
-  int quantity=0;
+  int quantity = 0;
 
-  RawSari({
-    required this.title,
-    this.buyingPrice,
-    this.details,
-    required this.color,
-    this.tercell = true,
-    this.images,
-    this.source,
-  });
+  RawSari(
+      {required this.title,
+      this.buyingPrice,
+      this.details,
+      required this.color,
+      this.tercell = true,
+      this.images,
+      this.source,
+      this.quantity = 0});
 
   factory RawSari.fromJson({required Map<String, dynamic> json}) {
     return RawSari(
@@ -30,8 +31,11 @@ class RawSari {
       buyingPrice: json['buyingPrice'],
       details: json['details'],
       tercell: json['tercell'],
-      source: json['source'],
+      source: json['source'] is Map<String, dynamic>
+          ? Source.fromJson(json: json['source'])
+          : null,
       images: json['images'] as List<String>?,
+      quantity: json['quantity'],
     )..id = json['id'];
   }
 
@@ -41,8 +45,9 @@ class RawSari {
         'buyingPrice': buyingPrice,
         'details': details,
         'tercell': tercell,
-        'source': source,
+        'source': source?.toJson(),
         'images': images,
         'id': id,
+        'quantity': quantity,
       };
 }

@@ -13,6 +13,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: _drawer(),
       appBar: AppBar(
         title: Obx(
           () => Text(
@@ -20,6 +21,15 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
         centerTitle: true,
+        leading: Builder(builder: (context) {
+          return IconButton(
+            icon: const Icon(
+              Icons.menu,
+              color: Colors.white,
+            ),
+            onPressed: () => controller.openDrawer(context),
+          );
+        }),
       ),
       body: Obx(
         () => AnimatedSwitcher(
@@ -48,8 +58,8 @@ class HomeView extends GetView<HomeController> {
             currentIndex: controller.currentIndex.value,
             onTap: controller.currentIndex,
             backgroundColor: Get.theme.appBarTheme.backgroundColor,
-            selectedItemColor: Colors.white,
-            unselectedItemColor: Colors.grey,
+            // selectedItemColor: Colors.white,
+            unselectedItemColor: Colors.grey[300],
             selectedFontSize: 12,
             unselectedFontSize: 12,
             items: controller.items
@@ -72,7 +82,38 @@ class HomeView extends GetView<HomeController> {
         child: Image.asset(
           "assets/bottom_bar_icons/${icon}_${state ? 2 : 1}.png",
           height: state ? 28 : 26,
-          color: state ? null : Colors.grey,
+          color: state ? null : Colors.grey[300],
         ),
       );
+
+  _drawer() {
+    return Drawer(
+      backgroundColor: Get.theme.appBarTheme.backgroundColor,
+      child: ListView(
+        children: [
+          const SizedBox(height: 60),
+          ListTile(
+            leading: const Icon(Icons.person_outline),
+            title: const Text("কাস্টমার"),
+            onTap: controller.toCustomerList,
+          ),
+          ListTile(
+            leading: const Icon(Icons.person_add_alt),
+            title: const Text("নতুন কাস্টমার"),
+            onTap: controller.newCustomer,
+          ),
+          ListTile(
+            leading: const Icon(Icons.account_tree_outlined),
+            title: const Text("সাপ্লায়ার"),
+            onTap: controller.toSupplierList,
+          ),
+          ListTile(
+            leading: const Icon(Icons.add),
+            title: const Text("নতুন সাপ্লায়ার"),
+            onTap: controller.addSupplier,
+          ),
+        ],
+      ),
+    );
+  }
 }

@@ -39,7 +39,7 @@ class CustomButton extends StatelessWidget {
         padding: padding ??
             const EdgeInsets.symmetric(
               horizontal: 16,
-              vertical: 8,
+              vertical: 12,
             ),
         fillColor: buttonColor ?? Get.theme.primaryColor,
         child: Text(
