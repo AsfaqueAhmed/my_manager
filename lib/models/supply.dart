@@ -1,11 +1,11 @@
 import 'package:my_manager/models/raw_sari.dart';
-import 'package:my_manager/models/source.dart';
+import 'package:my_manager/models/supplier.dart';
 import 'package:uuid/uuid.dart';
 
 class Supply {
   String id = const Uuid().v4();
   String title;
-  Source? source;
+  Supplier? source;
   DateTime? orderDate;
   DateTime? receiveDate;
   bool received = false;
@@ -26,7 +26,7 @@ class Supply {
     return Supply(
       title: json['title'],
       source: json['source'] is Map<String, dynamic>
-          ? Source.fromJson(json: json['source'])
+          ? Supplier.fromJson(json: json['source'])
           : null,
       orderDate: json['orderDate'] is int
           ? DateTime.fromMillisecondsSinceEpoch(json['orderDate'])

@@ -27,6 +27,7 @@ class Customer {
     )..id = json['id'];
   }
 
+
   Map<String, dynamic> toJson() => {
         'title': name,
         'details': details,

@@ -6,7 +6,7 @@ import 'package:my_manager/widget/empty_list.dart';
 import '../controllers/customer_controller.dart';
 
 class CustomerView extends StatelessWidget {
-  final CustomerController controller = Get.put(CustomerController());
+  final CustomerController controller = Get.find<CustomerController>();
 
   CustomerView({Key? key}) : super(key: key);
 

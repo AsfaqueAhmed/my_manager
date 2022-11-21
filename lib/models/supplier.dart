@@ -1,34 +1,38 @@
 import 'package:my_manager/models/raw_sari.dart';
 import 'package:uuid/uuid.dart';
 
-class Source {
+class Supplier {
   String id = const Uuid().v4();
-  String title;
+  String name;
   String? details;
+  String? address;
   String? mobileNumber;
   List<String>? images;
 
-  Source({
-    required this.title,
+  Supplier({
+    required this.name,
     this.details,
     this.images,
     this.mobileNumber,
+    this.address,
   });
 
-  factory Source.fromJson({required Map<String, dynamic> json}) {
-    return Source(
-      title: json['title'],
+  factory Supplier.fromJson({required Map<String, dynamic> json}) {
+    return Supplier(
+      name: json['title'],
       details: json['details'],
+      address: json['address'],
       mobileNumber: json['mobileNumber'],
       images: json['images'] as List<String>?,
     )..id = json['id'];
   }
 
   Map<String, dynamic> toJson() => {
-        'title': title,
+        'title': name,
         'details': details,
         'images': images,
         'mobileNumber': mobileNumber,
+        'address': address,
         'id': id,
       };
 }

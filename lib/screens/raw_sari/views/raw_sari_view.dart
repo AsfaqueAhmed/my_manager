@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../controllers/raw_sari_controller.dart';
 
 class RawSariView extends StatelessWidget {
-  final RawSariController controller = Get.put(RawSariController());
+  final RawSariController controller = Get.find<RawSariController>();
 
   RawSariView({Key? key}) : super(key: key);
 
@@ -24,7 +24,7 @@ class RawSariView extends StatelessWidget {
   _floatingActionButton() {
     return FloatingActionButton.extended(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-      onPressed: controller.addNew,
+      onPressed: controller.navigateToAddRawSari,
       label: const Text(
         'নতুন শাড়ি',
       ),
