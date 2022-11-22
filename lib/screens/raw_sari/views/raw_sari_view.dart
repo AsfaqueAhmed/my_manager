@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_manager/screens/raw_sari/component/raw_sari_title.dart';
+import 'package:my_manager/utility/loading.dart';
+import 'package:my_manager/widget/empty_list.dart';
 
 import '../controllers/raw_sari_controller.dart';
 
@@ -11,12 +14,21 @@ class RawSariView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Center(
-        child: Text(
-          'LogInView is working',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
+      body: Obx(() {
+        var rawSariList = controller.supplierList.value;
+        if (rawSariList == null) return const Center(child: Loading());
+        if (rawSariList.isEmpty) {
+          return const EmptyList();
+        }
+        return ListView.builder(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          itemBuilder: (context, index) {
+            var sari = rawSariList[index];
+            return RawSariTile(sari: sari);
+          },
+          itemCount: rawSariList.length,
+        );
+      }),
       floatingActionButton: _floatingActionButton(),
     );
   }

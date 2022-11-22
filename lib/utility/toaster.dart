@@ -8,4 +8,11 @@ class Toaster {
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
+
+  static success(String message) => Get.snackbar(
+        "Success",
+        message,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
 }

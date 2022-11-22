@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_manager/widget/picker_item.dart';
-import 'package:my_manager/widget/text_input_widget.dart';
+import 'picker_item.dart';
+import 'text_input_widget.dart';
 
 abstract class CustomPickerController {
   static Future show<T>({

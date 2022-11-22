@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_manager/widget/input_box.dart';
 
 import 'custom_picker.dart';
 import 'error_tooltip.dart';
+import 'input_box.dart';
 
 class DropDownInputArea<T> extends StatefulWidget {
   final List<T> items;

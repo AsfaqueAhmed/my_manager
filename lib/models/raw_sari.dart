@@ -11,7 +11,7 @@ class RawSari {
   bool? tercell;
 
   List<String>? images;
-  Supplier? source;
+  Supplier? supplier;
 
   int quantity = 0;
 
@@ -22,7 +22,7 @@ class RawSari {
       required this.color,
       this.tercell = true,
       this.images,
-      this.source,
+      this.supplier,
       this.material,
       this.quantity = 0});
 
@@ -34,10 +34,10 @@ class RawSari {
       details: json['details'],
       material: json['material'],
       tercell: json['tercell'],
-      source: json['source'] is Map<String, dynamic>
-          ? Supplier.fromJson(json: json['source'])
+      supplier: json['supplier'] is Map<String, dynamic>
+          ? Supplier.fromJson(json: json['supplier'])
           : null,
-      images: json['images'] as List<String>?,
+      images: json['images'].cast<String>(),
       quantity: json['quantity'],
     )..id = json['id'];
   }
@@ -49,7 +49,7 @@ class RawSari {
         'buyingPrice': buyingPrice,
         'details': details,
         'tercell': tercell,
-        'source': source?.toJson(),
+        'supplier': supplier?.toJson(),
         'images': images,
         'id': id,
         'quantity': quantity,

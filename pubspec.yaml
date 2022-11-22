@@ -15,6 +15,7 @@ dependencies:
   get_storage:
   firebase_core:
   cloud_firestore:
+  firebase_storage:
   image_picker:
   cached_network_image:
 

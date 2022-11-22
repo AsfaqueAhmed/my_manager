@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:my_manager/widget/error_tooltip.dart';
-import 'package:my_manager/widget/input_box.dart';
+import 'error_tooltip.dart';
+import 'input_box.dart';
 
 class TextInputWidget extends StatefulWidget {
   final String hint;
@@ -77,6 +77,7 @@ class TextInputWidgetState extends State<TextInputWidget> {
     controller = widget.controller ?? TextEditingController();
     node.addListener(_listener);
     controller.addListener(_listener);
+    _listener();
     super.initState();
   }
 
