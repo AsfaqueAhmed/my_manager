@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:my_manager/widget/zoomed_image.dart';
 
 class ImageInputArea extends StatefulWidget {
   final String title;
@@ -12,6 +13,8 @@ class ImageInputArea extends StatefulWidget {
   final Function({XFile? file, String? imageLink}) onFileRemove;
   final double size;
 
+  final bool enable;
+
   const ImageInputArea({
     Key? key,
     this.size = 90,
@@ -20,6 +23,7 @@ class ImageInputArea extends StatefulWidget {
     this.initialImageLink,
     required this.onImageAdded,
     required this.onFileRemove,
+    this.enable = true,
   }) : super(key: key);
 
   @override
@@ -46,6 +50,9 @@ class _ImageInputAreaState extends State<ImageInputArea> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.enable == false && files.isEmpty && fileUrls.isEmpty) {
+      return const SizedBox();
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -68,14 +75,19 @@ class _ImageInputAreaState extends State<ImageInputArea> {
               ...fileUrls.map((link) => _ImageBox(
                     size: widget.size - 8,
                     fileUrl: link,
-                    onRemove: () => widget.onFileRemove(imageLink: link),
+                    onRemove: widget.enable
+                        ? () => widget.onFileRemove(imageLink: link)
+                        : null,
                   )),
               ...files.map((file) => _ImageBox(
                     size: widget.size - 8,
                     file: file,
-                    onRemove: () => widget.onFileRemove(file: file),
+                    onRemove: widget.enable
+                        ? () => widget.onFileRemove(file: file)
+                        : null,
                   )),
-              _ImageBox(size: widget.size - 8, onFileAdded: onImageAdded)
+              if (widget.enable)
+                _ImageBox(size: widget.size - 8, onFileAdded: onImageAdded)
             ],
           ),
         ),
@@ -111,65 +123,73 @@ class _ImageBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        height: size,
-        width: size,
-        margin: const EdgeInsets.only(right: 8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
-          border: Border.all(width: 0.5, color: Colors.grey),
-        ),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Builder(
-              builder: (context) {
-                if (fileUrl != null) {
-                  return CachedNetworkImage(
-                    height: size,
-                    width: size,
-                    imageUrl: fileUrl!,
-                    fit: BoxFit.cover,
-                  );
-                } else if (file != null) {
-                  return Image.file(
-                    height: size,
-                    width: size,
-                    File(file!.path),
-                    fit: BoxFit.cover,
-                  );
-                } else if (onFileAdded == null) {
-                  return const SizedBox();
-                } else {
-                  return GestureDetector(
-                    onTap: _pickFile,
-                    child: const Center(
-                      child: Icon(Icons.add_photo_alternate_outlined,
-                          color: Colors.grey, size: 36),
-                    ),
-                  );
-                }
-              },
-            ),
-            if ((file != null || fileUrl != null) && onRemove != null)
-              Positioned(
-                top: 1,
-                right: 1,
-                child: GestureDetector(
-                  onTap: onRemove,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.red[100],
-                        borderRadius: BorderRadius.circular(4)),
-                    child: const Icon(
-                      Icons.close,
-                      color: Colors.red,
-                      size: 20,
+      child: GestureDetector(
+        onTap: file == null && fileUrl == null
+            ? null
+            : () => ZoomedImage.show(
+                  url: fileUrl,
+                  file: file,
+                ),
+        child: Container(
+          height: size,
+          width: size,
+          margin: const EdgeInsets.only(right: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(width: 0.5, color: Colors.grey),
+          ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Builder(
+                builder: (context) {
+                  if (fileUrl != null) {
+                    return CachedNetworkImage(
+                      height: size,
+                      width: size,
+                      imageUrl: fileUrl!,
+                      fit: BoxFit.cover,
+                    );
+                  } else if (file != null) {
+                    return Image.file(
+                      height: size,
+                      width: size,
+                      File(file!.path),
+                      fit: BoxFit.cover,
+                    );
+                  } else if (onFileAdded == null) {
+                    return const SizedBox();
+                  } else {
+                    return GestureDetector(
+                      onTap: _pickFile,
+                      child: const Center(
+                        child: Icon(Icons.add_photo_alternate_outlined,
+                            color: Colors.grey, size: 36),
+                      ),
+                    );
+                  }
+                },
+              ),
+              if ((file != null || fileUrl != null) && onRemove != null)
+                Positioned(
+                  top: 1,
+                  right: 1,
+                  child: GestureDetector(
+                    onTap: onRemove,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.red[100],
+                          borderRadius: BorderRadius.circular(4)),
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.red,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );

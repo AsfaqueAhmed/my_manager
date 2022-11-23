@@ -1,86 +1,70 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:my_manager/models/designed_sari.dart';
 import 'package:my_manager/models/raw_sari.dart';
 import 'package:my_manager/models/supplier.dart';
+import 'package:my_manager/services/designed_sari_service.dart';
 import 'package:my_manager/services/file_upload_service.dart';
 import 'package:my_manager/services/raw_sari_service.dart';
 import 'package:my_manager/utility/loading.dart';
 import 'package:my_manager/utility/toaster.dart';
 
-class AddEditRawSariController extends GetxController {
+class AddEditDesignedSariController extends GetxController {
   late TextEditingController titleController,
-      colorController,
-      materialController,
       detailsController,
       quantityController,
-      buyingPriceController;
+      priceController;
 
   var images = Rx<List<XFile>>([]);
   var imageUrls = Rx<List<String>>([]);
 
-  Rx<Supplier?> supplier = Rx<Supplier?>(null);
-  RawSari? rawSari = Get.arguments;
+  DesignedSari? designedSari = Get.arguments;
   RxBool canEdit = true.obs;
 
-  late RxString tarcelStatus;
-
-  var tarcelStatuses = const ["টার্সেল আছে", "টার্সেল নাই"];
 
   @override
   void onInit() {
     super.onInit();
-    titleController = TextEditingController(text: rawSari?.title);
-    colorController = TextEditingController(text: rawSari?.color);
-    buyingPriceController = TextEditingController(text: rawSari?.buyingPrice);
-    materialController = TextEditingController(text: rawSari?.material);
-    detailsController = TextEditingController(text: rawSari?.details);
+    titleController = TextEditingController(text: designedSari?.title);
+    priceController = TextEditingController(text: designedSari?.costing);
+    detailsController = TextEditingController(text: designedSari?.details);
     quantityController =
-        TextEditingController(text: rawSari?.quantity.toString() ?? '0');
-    tarcelStatus = RxString(tarcelStatuses[0]);
-    supplier.value = rawSari?.supplier;
-    canEdit.value = (rawSari == null);
-    if (rawSari?.images != null) imageUrls([...(rawSari!.images ?? [])]);
+        TextEditingController(text: designedSari?.quantity.toString()??'0');
+    canEdit.value = (designedSari == null);
+    if (designedSari?.images != null) imageUrls([...(designedSari!.images ?? [])]);
   }
 
   @override
   void dispose() {
     titleController.dispose();
-    colorController.dispose();
-    buyingPriceController.dispose();
-    materialController.dispose();
+    priceController.dispose();
     detailsController.dispose();
     super.dispose();
   }
 
   save() async {
     if (titleController.text.isEmpty ||
-        colorController.text.isEmpty ||
-        buyingPriceController.text.isEmpty ||
-        materialController.text.isEmpty ||
+        priceController.text.isEmpty ||
         int.tryParse(quantityController.text) == null) return;
     try {
-      RawSari rawSari = RawSari(
+      DesignedSari designedSari = DesignedSari(
         title: titleController.text,
-        color: colorController.text,
-        material: materialController.text,
-        buyingPrice: buyingPriceController.text,
-        supplier: supplier.value,
-        tercell: tarcelStatuses.indexOf(tarcelStatus.value) == 0,
         details: detailsController.text,
+        costing: priceController.text,
         quantity: int.parse(quantityController.text),
       );
-      if (this.rawSari != null) {
-        rawSari.id = this.rawSari!.id;
+      if (this.designedSari != null) {
+        designedSari.id = this.designedSari!.id;
       }
 
       FileUploadService().uploadFiles(
         files: images.value,
-        path: rawSari.id,
+        path: designedSari.id,
         onUploadComplete: (List<String> images) async {
-          rawSari.images = [...imageUrls.value, ...images];
+          designedSari.images = [...imageUrls.value, ...images];
           Loading.show();
-          await RawSariService().addNewSari(rawSari);
+          await DesignedSariService().addNewSari(designedSari);
           Loading.hide();
           Get.back();
           Toaster.success("শাড়ি সংযোজন সফল");

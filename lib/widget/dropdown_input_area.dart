@@ -17,6 +17,8 @@ class DropDownInputArea<T> extends StatefulWidget {
 
   final bool showSearch;
 
+  final bool enable;
+
   const DropDownInputArea({
     Key? key,
     required this.onSelect,
@@ -28,6 +30,7 @@ class DropDownInputArea<T> extends StatefulWidget {
     required this.title,
     this.showSearch = false,
     this.getSubString,
+    this.enable = true,
   }) : super(key: key);
 
   @override
@@ -50,7 +53,7 @@ class DropDownInputAreaState<Type> extends State<DropDownInputArea<Type>> {
       state = 1;
     }
     return GestureDetector(
-      onTap: _selectType,
+      onTap: widget.enable == true ? _selectType : null,
       child: Stack(
         clipBehavior: Clip.none,
         children: [

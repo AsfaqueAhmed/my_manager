@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_manager/widget/custom_buttom.dart';
+import 'package:my_manager/widget/custom_button.dart';
 
 class NotFound404 extends StatelessWidget {
   const NotFound404({Key? key}) : super(key: key);

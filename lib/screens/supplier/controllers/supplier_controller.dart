@@ -18,6 +18,7 @@ class SupplierController extends GetxController {
     super.onInit();
     _streamSubscription =
         supplierCollection.orderBy("title").snapshots().listen((snapShot) {
+          supplierList.value=[];
           if (snapShot.size > 0) {
             supplierList.value = snapShot.docs
                 .map((e) => Supplier.fromJson(json: e.data()))

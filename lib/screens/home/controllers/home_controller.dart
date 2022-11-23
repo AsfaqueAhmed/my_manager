@@ -39,4 +39,8 @@ class HomeController extends GetxController {
     Get.back();
     Get.toNamed(routeName);
   }
+
+  void toDesignList() => _closeDrawerAndNavigateTo(Routes.designList);
+
+  void addDesign() => _closeDrawerAndNavigateTo(Routes.addEditDesign);
 }

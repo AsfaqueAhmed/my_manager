@@ -8,17 +8,18 @@ import 'package:my_manager/services/raw_sari_service.dart';
 class RawSariController extends GetxController {
   late StreamSubscription _streamSubscription;
 
-  Rx<List<RawSari>?> supplierList = Rx(null);
+  Rx<List<RawSari>?> rawSariList = Rx(null);
 
-  var supplierCollection = RawSariService().collection;
+  var rawSariCollection = RawSariService().collection;
 
   @override
   void onInit() {
     super.onInit();
     _streamSubscription =
-        supplierCollection.orderBy("title").snapshots().listen((snapShot) {
+        rawSariCollection.orderBy("title").snapshots().listen((snapShot) {
+      rawSariList.value = [];
       if (snapShot.size > 0) {
-        supplierList.value =
+        rawSariList.value =
             snapShot.docs.map((e) => RawSari.fromJson(json: e.data())).toList();
       }
     });

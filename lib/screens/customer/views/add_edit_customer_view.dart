@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_manager/screens/customer/controllers/add_edit_customer_controller.dart';
-import 'package:my_manager/widget/custom_buttom.dart';
+import 'package:my_manager/widget/custom_button.dart';
 import 'package:my_manager/widget/text_input_widget.dart';
 
 class AddEditCustomerView extends StatelessWidget {

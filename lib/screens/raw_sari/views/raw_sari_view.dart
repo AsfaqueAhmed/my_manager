@@ -15,7 +15,7 @@ class RawSariView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() {
-        var rawSariList = controller.supplierList.value;
+        var rawSariList = controller.rawSariList.value;
         if (rawSariList == null) return const Center(child: Loading());
         if (rawSariList.isEmpty) {
           return const EmptyList();
@@ -24,7 +24,10 @@ class RawSariView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           itemBuilder: (context, index) {
             var sari = rawSariList[index];
-            return RawSariTile(sari: sari);
+            return RawSariTile(
+              sari: sari,
+              onTap: () => controller.showRawSariDetails(sari),
+            );
           },
           itemCount: rawSariList.length,
         );

@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_manager/models/supplier.dart';
 import 'package:my_manager/screens/supplier/controllers/supplier_controller.dart';
-import 'package:my_manager/widget/checker_item_list.dart';
 import 'package:my_manager/widget/custom_button.dart';
-import 'package:my_manager/widget/dropdown_input_area.dart';
 import 'package:my_manager/widget/image_input_area.dart';
 import 'package:my_manager/widget/text_input_widget.dart';
 
-import '../controllers/add_edit_raw_sari_controller.dart';
+import '../controllers/add_edit_design_controller.dart';
 
-class AddEditRawSariView extends StatelessWidget {
-  final AddEditRawSariController controller =
-      Get.put(AddEditRawSariController());
+class AddEditDesignView extends StatelessWidget {
+  final AddEditDesignController controller = Get.put(AddEditDesignController());
   final supplierController = Get.find<SupplierController>();
 
-  AddEditRawSariView({Key? key}) : super(key: key);
+  AddEditDesignView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +21,13 @@ class AddEditRawSariView extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: Builder(builder: (c) {
-              if (controller.rawSari == null) {
-                return const Text("নতুন এক কালার শাড়ি");
+              if (controller.design == null) {
+                return const Text("নতুন ডিজাইন");
               }
               if (canEdit) {
-                return const Text("এক কালার শাড়ি এডিট");
+                return const Text("ডিজাইন এডিট");
               }
-              return Text(controller.rawSari!.title);
+              return Text(controller.design!.title);
             }),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios),
@@ -39,7 +35,7 @@ class AddEditRawSariView extends StatelessWidget {
               onPressed: () => Get.back(),
             ),
             actions: [
-              if (controller.rawSari != null)
+              if (controller.design != null)
                 Builder(builder: (c) {
                   if (!canEdit) {
                     return IconButton(
@@ -72,62 +68,17 @@ class AddEditRawSariView extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               TextInputWidget(
-                hint: "রং",
-                controller: controller.colorController,
+                hint: "ডিজাইন টাইপ",
+                controller: controller.designTypeController,
                 enable: canEdit,
               ),
               const SizedBox(height: 20),
               TextInputWidget(
-                hint: "ম্যাটেরিয়াল",
-                controller: controller.materialController,
+                hint: "খরচ",
+                controller: controller.costController,
                 enable: canEdit,
               ),
               const SizedBox(height: 20),
-              TextInputWidget(
-                hint: "দাম",
-                controller: controller.buyingPriceController,
-                enable: canEdit,
-              ),
-              const SizedBox(height: 20),
-              TextInputWidget(
-                hint: "পরিমাণ",
-                controller: controller.quantityController,
-                enable: canEdit,
-                keyboardType: const TextInputType.numberWithOptions(
-                  signed: false,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Obx(
-                () {
-                  return DropDownInputArea<Supplier>(
-                    title: "সাপ্লায়ার",
-                    selectedItem: controller.supplier.value,
-                    items: supplierController.supplierList.value ?? [],
-                    onSelect: controller.supplier,
-                    getId: (item) => item.id,
-                    getTitle: (item) => item.name,
-                    getSubString: (item) => "${item.mobileNumber}",
-                    enable: canEdit,
-                  );
-                },
-              ),
-              const SizedBox(height: 20),
-              Obx(
-                () {
-                  return SingleCheckerItemList<String>(
-                    title: "টার্সেল",
-                    items: controller.tarcelStatuses,
-                    onItemCheck: controller.tarcelStatus,
-                    selectedItem: controller.tarcelStatus.value,
-                    enable: canEdit,
-                  );
-                },
-              ),
-              if (controller.rawSari?.images != null &&
-                  controller.rawSari!.images!.isNotEmpty &&
-                  controller.images.value.isNotEmpty)
-                const SizedBox(height: 20),
               Obx(
                 () => ImageInputArea(
                   title: "ছবি",
@@ -149,7 +100,7 @@ class AddEditRawSariView extends StatelessWidget {
               if (canEdit)
                 CustomButton(
                   onPressed: controller.save,
-                  buttonText: "শাড়ি যোগ করুন",
+                  buttonText: "ডিজাইন যোগ করুন",
                   textColor: Colors.white,
                 )
             ],

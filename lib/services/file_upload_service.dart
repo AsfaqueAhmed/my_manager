@@ -25,82 +25,84 @@ class FileUploadService {
     required Function(List<String>) onUploadComplete,
     required Function() onUploadFailed,
   }) async {
-    RxString title = "Uploading File".obs;
-    RxInt progress = 0.obs;
-    Get.bottomSheet(Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
-          color: Colors.white,
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Obx(
-              () => Text(
-                title.value,
-                style: const TextStyle(fontSize: 16),
+    List<String> urls = [];
+    if (files.isNotEmpty) {
+      RxString title = "Uploading File".obs;
+      RxInt progress = 0.obs;
+      Get.bottomSheet(Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color: Colors.white,
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Obx(
+                () => Text(
+                  title.value,
+                  style: const TextStyle(fontSize: 16),
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Obx(() {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 20,
-                    width: double.infinity,
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: 20,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(2),
-                            color: Colors.grey,
-                          ),
-                        ),
-                        FractionallySizedBox(
-                          widthFactor: progress.value.toDouble() / 100,
-                          heightFactor: 1.0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(2),
-                              color: Colors.green,
-                            ),
+              const SizedBox(height: 16),
+              Obx(() {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 20,
+                      width: double.infinity,
+                      child: Stack(
+                        children: [
+                          Container(
                             height: 20,
                             width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2),
+                              color: Colors.grey,
+                            ),
                           ),
-                        )
-                      ],
+                          FractionallySizedBox(
+                            widthFactor: progress.value.toDouble() / 100,
+                            heightFactor: 1.0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(2),
+                                color: Colors.green,
+                              ),
+                              height: 20,
+                              width: double.infinity,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              );
-            }),
-          ],
+                  ],
+                );
+              }),
+            ],
+          ),
         ),
-      ),
-    ));
-    List<String> urls = [];
-    int i = 1;
+      ));
+      int i = 1;
 
-    for (var file in files) {
-      title.value = "Uploading File - $i of ${files.length}";
-      await uploadFile(
-        file: file,
-        path: path,
-        onUploadComplete: (url) => urls.add(url),
-        onUploadFailed: onUploadFailed,
-        onProgress: progress,
-      );
-      i++;
+      for (var file in files) {
+        title.value = "Uploading File - $i of ${files.length}";
+        await uploadFile(
+          file: file,
+          path: path,
+          onUploadComplete: (url) => urls.add(url),
+          onUploadFailed: onUploadFailed,
+          onProgress: progress,
+        );
+        i++;
+      }
+
+      Get.back();
     }
-
-    Get.back();
     onUploadComplete(urls);
   }
 

@@ -14,7 +14,7 @@ class MultiImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (images == null || images!.isEmpty) return const SizedBox();
+    if (images == null || images!.isEmpty) return SizedBox(height: size);
     var factor = .33;
     return SizedBox(
       width: (size * (1 + factor * (images!.length - 1)))
@@ -29,7 +29,8 @@ class MultiImage extends StatelessWidget {
               height: size,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(width: 2, color: Get.theme.scaffoldBackgroundColor),
+                border: Border.all(
+                    width: 2, color: Get.theme.scaffoldBackgroundColor),
                 image: DecorationImage(
                   image: CachedNetworkImageProvider(images![index]),
                   fit: BoxFit.cover,

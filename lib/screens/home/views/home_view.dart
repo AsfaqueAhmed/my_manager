@@ -91,29 +91,68 @@ class HomeView extends GetView<HomeController> {
       backgroundColor: Get.theme.appBarTheme.backgroundColor,
       child: ListView(
         children: [
-          const SizedBox(height: 60),
-          ListTile(
-            leading: const Icon(Icons.person_outline),
-            title: const Text("কাস্টমার"),
-            onTap: controller.toCustomerList,
+          const SizedBox(height: 24),
+          _expansionDrawerTile(
+            title: "কাস্টমার",
+            listIcon: Icons.person_outline,
+            addIcon: Icons.person_add_alt,
+            onShowList: controller.toCustomerList,
+            onAddItem: controller.newCustomer,
           ),
-          ListTile(
-            leading: const Icon(Icons.person_add_alt),
-            title: const Text("নতুন কাস্টমার"),
-            onTap: controller.newCustomer,
+          _expansionDrawerTile(
+            title: "সাপ্লায়ার",
+            listIcon: Icons.account_tree_outlined,
+            addIcon: Icons.add,
+            onShowList: controller.toSupplierList,
+            onAddItem: controller.addSupplier,
           ),
-          ListTile(
-            leading: const Icon(Icons.account_tree_outlined),
-            title: const Text("সাপ্লায়ার"),
-            onTap: controller.toSupplierList,
-          ),
-          ListTile(
-            leading: const Icon(Icons.add),
-            title: const Text("নতুন সাপ্লায়ার"),
-            onTap: controller.addSupplier,
+          _expansionDrawerTile(
+            title: "ডিজাইন",
+            listIcon: Icons.image_aspect_ratio_outlined,
+            addIcon: Icons.draw_outlined,
+            onShowList: controller.toDesignList,
+            onAddItem: controller.addDesign,
           ),
         ],
       ),
     );
   }
+
+  ExpansionTile _expansionDrawerTile({
+    required String title,
+    required IconData listIcon,
+    required IconData addIcon,
+    required Function() onShowList,
+    required Function() onAddItem,
+  }) {
+    return ExpansionTile(
+      childrenPadding: const EdgeInsets.only(left: 16),
+      collapsedIconColor: Colors.white,
+      iconColor: Colors.white,
+      backgroundColor: Get.theme.scaffoldBackgroundColor.withOpacity(0.2),
+      title: _text(title),
+      children: [
+        ListTile(
+          leading: _icon(listIcon),
+          title: _text("$title তালিকা"),
+          onTap: onShowList,
+        ),
+        ListTile(
+          leading: _icon(addIcon),
+          title: _text("নতুন $title"),
+          onTap: onAddItem,
+        ),
+      ],
+    );
+  }
+
+  Icon _icon(IconData listIcon) => Icon(
+        listIcon,
+        color: Colors.white,
+      );
+
+  Text _text(String title) => Text(
+        title,
+        style: const TextStyle(color: Colors.white),
+      );
 }

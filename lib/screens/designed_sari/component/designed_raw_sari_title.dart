@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_manager/models/raw_sari.dart';
+import 'package:my_manager/models/designed_sari.dart';
 import 'package:my_manager/widget/multi_image.dart';
 
-class RawSariTile extends StatelessWidget {
-  const RawSariTile({
+class DesignedSariTile extends StatelessWidget {
+  const DesignedSariTile({
     Key? key,
     required this.sari,
     this.onTap,
   }) : super(key: key);
 
-  final RawSari sari;
+  final DesignedSari sari;
   final Function()? onTap;
 
   @override
@@ -33,14 +33,14 @@ class RawSariTile extends StatelessWidget {
                     sari.title,
                     style: const TextStyle(fontSize: 16),
                   ),
-                  if (sari.material != null)
+                  if (sari.rawSari?.material != null)
                     Text(
-                      sari.material ?? "",
+                      sari.rawSari?.material ?? "",
                       style: const TextStyle(fontSize: 12, height: 0.9),
                     ),
-                  if (sari.supplier != null)
+                  if (sari.rawSari?.color != null)
                     Text(
-                      sari.supplier?.name ?? "",
+                      sari.rawSari?.color ?? "",
                       style: const TextStyle(fontSize: 12, height: 1.5),
                     ),
                 ],

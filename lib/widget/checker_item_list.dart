@@ -10,6 +10,8 @@ class SingleCheckerItemList<T> extends StatelessWidget {
   final T? selectedItem;
   final Function(T) onItemCheck;
 
+  final bool enable;
+
   const SingleCheckerItemList({
     Key? key,
     required this.title,
@@ -19,6 +21,7 @@ class SingleCheckerItemList<T> extends StatelessWidget {
     this.getTitle,
     this.selectedItem,
     this.getId,
+    this.enable = true,
   }) : super(key: key);
 
   @override
@@ -44,7 +47,7 @@ class SingleCheckerItemList<T> extends StatelessWidget {
 
   _itemUiBuilder(T e) {
     return GestureDetector(
-      onTap: () => onItemCheck(e),
+      onTap: enable ? () => onItemCheck(e) : null,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         color: Colors.transparent,

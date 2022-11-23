@@ -1,6 +1,9 @@
 import 'package:get/get.dart';
 import 'package:my_manager/screens/customer/views/add_edit_customer_view.dart';
 import 'package:my_manager/screens/customer/views/customer_view.dart';
+import 'package:my_manager/screens/design/views/add_edit_design_view.dart';
+import 'package:my_manager/screens/design/views/design_view.dart';
+import 'package:my_manager/screens/designed_sari/views/add_edit_designed_sari_view.dart';
 import 'package:my_manager/screens/home/bindings/home_binding.dart';
 import 'package:my_manager/screens/home/views/home_view.dart';
 import 'package:my_manager/screens/raw_sari/views/add_edit_raw_sari_view.dart';
@@ -15,6 +18,10 @@ abstract class Routes {
   static const supplierList = "/supplier-list";
   static const addEditSupplier = "/add-supplier";
   static const addEditRawSari = "/add-raw-sari";
+  static const addEditDesignedSari = "/add-designed-sari";
+
+  static const designList = "/design-list";
+  static const addEditDesign = "/add-design";
 }
 
 abstract class Pages {
@@ -43,6 +50,18 @@ abstract class Pages {
     GetPage(
       name: Routes.addEditRawSari,
       page: () => AddEditRawSariView(),
+    ),
+    GetPage(
+      name: Routes.designList,
+      page: () => DesignView(),
+    ),
+    GetPage(
+      name: Routes.addEditDesign,
+      page: () => AddEditDesignView(),
+    ),
+    GetPage(
+      name: Routes.addEditDesignedSari,
+      page: () => AddEditDesignedSariView(),
     ),
   ];
 }
