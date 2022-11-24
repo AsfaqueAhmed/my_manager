@@ -6,6 +6,7 @@ import 'package:my_manager/screens/design/views/design_view.dart';
 import 'package:my_manager/screens/designed_sari/views/add_edit_designed_sari_view.dart';
 import 'package:my_manager/screens/home/bindings/home_binding.dart';
 import 'package:my_manager/screens/home/views/home_view.dart';
+import 'package:my_manager/screens/order/views/add_edit_order_view.dart';
 import 'package:my_manager/screens/raw_sari/views/add_edit_raw_sari_view.dart';
 import 'package:my_manager/screens/supplier/views/add_edit_supplier_view.dart';
 import 'package:my_manager/screens/supplier/views/supplier_view.dart';
@@ -22,6 +23,8 @@ abstract class Routes {
 
   static const designList = "/design-list";
   static const addEditDesign = "/add-design";
+
+  static const addEditOrder = "/add-order";
 }
 
 abstract class Pages {
@@ -62,6 +65,10 @@ abstract class Pages {
     GetPage(
       name: Routes.addEditDesignedSari,
       page: () => AddEditDesignedSariView(),
+    ),
+    GetPage(
+      name: Routes.addEditOrder,
+      page: () => AddEditOrderView(),
     ),
   ];
 }

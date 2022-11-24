@@ -131,10 +131,12 @@ abstract class CustomPickerWithCustomUiController {
   static Future show<T>({
     required String title,
     required List<T> items,
-    String Function(T)? getTitle,
-    TextEditingController? searchController,
+    required dynamic Function(T) getId,
+    required Widget Function(T) pickerItemBuilder,
+    //TextEditingController? searchController,
     T? selectedType,
   }) {
+
     return Get.bottomSheet(
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -163,42 +165,39 @@ abstract class CustomPickerWithCustomUiController {
                 ],
               ),
             ),
-            if (searchController != null)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16) +
-                    const EdgeInsets.only(top: 20),
-                child: TextInputWidget(
-                  controller: searchController,
-                  hint: "সার্চ",
-                ),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(bottom: 8),
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () => Navigator.pop(context, items[index]),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            radius: 16,
+                            backgroundColor:
+                                isSelected(selectedType, items[index], getId)
+                                    ? Get.theme.primaryColor
+                                    : Colors.grey,
+                            foregroundColor: Colors.white,
+                            child: const Icon(Icons.check),
+                          ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: pickerItemBuilder(items[index]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
-            if (searchController == null)
-              Expanded(
-                child: _listView<T>(
-                  items,
-                  selectedType,
-                ),
-              )
-            else
-              Expanded(
-                child: ValueListenableBuilder(
-                    valueListenable: searchController,
-                    builder: (context, value, child) {
-                      var list = items
-                          .where(
-                            (e) => (getTitle == null
-                                    ? e.toString()
-                                    : getTitle(e!))
-                                .toLowerCase()
-                                .contains(searchController.text.toLowerCase()),
-                          )
-                          .toList();
-                      return _listView<T>(
-                        list,
-                        selectedType,
-                      );
-                    }),
-              ),
+            ),
           ],
         ),
         shape: const RoundedRectangleBorder(
@@ -209,10 +208,6 @@ abstract class CustomPickerWithCustomUiController {
         backgroundColor: Get.theme.scaffoldBackgroundColor);
   }
 
-  static ListView _listView<T>(
-    List<T> list,
-    selectedType,
-  ) {
-    return;
-  }
+  static isSelected<T>(selectedType, item, dynamic Function(T) getId) =>
+      selectedType == null ? false : getId(selectedType) == getId(item);
 }

@@ -1,28 +1,28 @@
 import 'package:my_manager/models/customer.dart';
-import 'package:my_manager/models/designed_sari.dart';
+import 'package:my_manager/models/ordered_sari.dart';
 import 'package:uuid/uuid.dart';
 
 class Order {
   String id = const Uuid().v4();
-  String title;
   DateTime? orderDate;
   DateTime? deliveryDate;
   DateTime? shippingDate;
   Customer customer;
-  List<DesignedSari>? sari;
+  List<OrderedSari> sari;
+
+  String? details;
 
   Order({
-    required this.title,
     this.orderDate,
     this.deliveryDate,
     this.shippingDate,
-    this.sari,
+    this.details,
+    required this.sari,
     required this.customer,
   });
 
   factory Order.fromJson({required Map<String, dynamic> json}) {
     return Order(
-      title: json['title'],
       orderDate: json['orderDate'] is int
           ? DateTime.fromMillisecondsSinceEpoch(json['orderDate'])
           : null,
@@ -33,18 +33,20 @@ class Order {
           ? DateTime.fromMillisecondsSinceEpoch(json['shippingDate'])
           : null,
       sari: json['sari'] is List<Map<String, dynamic>>
-          ? json['sari'].map((e) => DesignedSari.fromJson(json: e)).toList()
+          ? json['sari'].map((e) => OrderedSari.fromJson(json: e)).toList()
           : null,
+      details: json['details'],
       customer: Customer.fromJson(json: json['customer']),
     )..id = json['id'];
   }
 
   Map<String, dynamic> toJson() => {
-        'title': title,
         'id': id,
         'orderDate': orderDate?.millisecondsSinceEpoch,
         'receiveDate': deliveryDate?.millisecondsSinceEpoch,
         'shippingDate': shippingDate?.millisecondsSinceEpoch,
+        'details': details,
         'customer': customer.toJson(),
+        'sari': sari.map((e) => e.toJson()).toList(),
       };
 }

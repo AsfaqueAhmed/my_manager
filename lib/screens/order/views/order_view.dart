@@ -24,7 +24,7 @@ class OrderView extends StatelessWidget {
   _floatingActionButton() {
     return FloatingActionButton.extended(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-      onPressed: controller.addNew,
+      onPressed: controller.navigateToAddOrder,
       label: const Text(
         'নতুন অর্ডার',
       ),

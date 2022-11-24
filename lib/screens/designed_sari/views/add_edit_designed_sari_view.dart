@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_manager/models/design.dart';
+import 'package:my_manager/models/raw_sari.dart';
+import 'package:my_manager/screens/design/component/design_title.dart';
+import 'package:my_manager/screens/raw_sari/component/raw_sari_title.dart';
 import 'package:my_manager/screens/supplier/controllers/supplier_controller.dart';
 import 'package:my_manager/widget/custom_button.dart';
+import 'package:my_manager/widget/custom_dropdown_input_area.dart';
 import 'package:my_manager/widget/image_input_area.dart';
 import 'package:my_manager/widget/text_input_widget.dart';
 
@@ -66,6 +71,32 @@ class AddEditDesignedSariView extends StatelessWidget {
                 hint: "টাইটেল",
                 controller: controller.titleController,
                 enable: canEdit,
+              ),
+              const SizedBox(height: 20),
+              Obx(
+                () => CustomDropDownInputArea<RawSari>(
+                  title: "শাড়ি",
+                  enable: canEdit,
+                  selectedItem: controller.rawSari.value,
+                  onSelect: controller.rawSari,
+                  getId: (sari) => sari.id,
+                  items: controller.rawSariList,
+                  pickerItemBuilder: (design) => RawSariTile(sari: design,removeCount:true),
+                  pickedItemBuilder: (design) => RawSariTile(sari: design,removeBorder: true,removeCount:true),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Obx(
+                () => CustomDropDownInputArea<Design>(
+                  title: "ডিজাইন",
+                  enable: canEdit,
+                  selectedItem: controller.design.value,
+                  onSelect: controller.design,
+                  getId: (design) => design.id,
+                  items: controller.designList,
+                  pickerItemBuilder: (design) => DesignTile(design: design),
+                  pickedItemBuilder: (design) => DesignTile(design: design,removeBorder: true,),
+                ),
               ),
               const SizedBox(height: 20),
               TextInputWidget(

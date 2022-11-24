@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_manager/routes.dart';
 import 'package:my_manager/screens/designed_sari/component/designed_raw_sari_title.dart';
 import 'package:my_manager/utility/loading.dart';
 import 'package:my_manager/widget/empty_list.dart';
@@ -24,7 +25,12 @@ class DesignedSariView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           itemBuilder: (context, index) {
             var sari = designedSariList[index];
-            return DesignedSariTile(sari: sari);
+            return DesignedSariTile(
+              sari: sari,
+              onTap: () {
+                Get.toNamed(Routes.addEditDesignedSari, arguments: sari);
+              },
+            );
           },
           itemCount: designedSariList.length,
         );

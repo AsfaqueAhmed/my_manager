@@ -4,10 +4,16 @@ import 'package:my_manager/models/raw_sari.dart';
 import 'package:my_manager/widget/multi_image.dart';
 
 class RawSariTile extends StatelessWidget {
+  final bool removeBorder;
+
+  final bool removeCount;
+
   const RawSariTile({
     Key? key,
     required this.sari,
     this.onTap,
+    this.removeBorder = false,
+    this.removeCount = false,
   }) : super(key: key);
 
   final RawSari sari;
@@ -19,9 +25,9 @@ class RawSariTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: Colors.transparent,
-          border: Border(bottom: BorderSide()),
+          border: removeBorder ? null : const Border(bottom: BorderSide()),
         ),
         child: Row(
           children: [
@@ -52,26 +58,27 @@ class RawSariTile extends StatelessWidget {
               images: sari.images,
               size: 60,
             ),
-            const SizedBox(width: 8),
-            CircleAvatar(
-              radius: 22,
-              backgroundColor: Get.theme.primaryColor,
-              child: CircleAvatar(
-                radius: 20,
-                backgroundColor: Get.theme.scaffoldBackgroundColor,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Center(
-                    child: FittedBox(
-                      child: Text(
-                        sari.quantity.toString(),
-                        style: TextStyle(color: Get.theme.primaryColor),
+            if (!removeCount) const SizedBox(width: 8),
+            if (!removeCount)
+              CircleAvatar(
+                radius: 22,
+                backgroundColor: Get.theme.primaryColor,
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Get.theme.scaffoldBackgroundColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Center(
+                      child: FittedBox(
+                        child: Text(
+                          sari.quantity.toString(),
+                          style: TextStyle(color: Get.theme.primaryColor),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),

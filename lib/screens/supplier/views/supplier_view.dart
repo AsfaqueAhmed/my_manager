@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_manager/screens/supplier/component/supplier_tile.dart';
 import 'package:my_manager/utility/loading.dart';
 import 'package:my_manager/widget/empty_list.dart';
 
@@ -33,30 +34,8 @@ class SupplierView extends StatelessWidget {
         }
         return ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          itemBuilder: (context, index) => Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide()),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  supplierList[index].name,
-                  style: const TextStyle(fontSize: 16),
-                ),
-                if (supplierList[index].mobileNumber != null)
-                  Text(
-                    supplierList[index].mobileNumber ?? "",
-                    style: const TextStyle(fontSize: 12, height: 0.9),
-                  ),
-                if (supplierList[index].address != null)
-                  Text(
-                    supplierList[index].address ?? "",
-                    style: const TextStyle(fontSize: 12, height: 1.5),
-                  ),
-              ],
-            ),
+          itemBuilder: (context, index) => SupplierTile(
+            supplierList: supplierList[index],
           ),
           itemCount: supplierList.length,
         );

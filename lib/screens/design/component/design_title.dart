@@ -7,10 +7,12 @@ class DesignTile extends StatelessWidget {
     Key? key,
     required this.design,
     this.onTap,
+    this.removeBorder = false,
   }) : super(key: key);
 
   final Design design;
   final Function()? onTap;
+  final bool removeBorder;
 
   @override
   Widget build(BuildContext context) {
@@ -18,15 +20,17 @@ class DesignTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-        decoration: const BoxDecoration(
+        decoration:  BoxDecoration(
           color: Colors.transparent,
-          border: Border(bottom: BorderSide()),
+          border: removeBorder ? null : const Border(bottom: BorderSide()),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     design.title,

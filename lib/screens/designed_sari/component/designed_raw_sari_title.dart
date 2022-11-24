@@ -33,15 +33,20 @@ class DesignedSariTile extends StatelessWidget {
                     sari.title,
                     style: const TextStyle(fontSize: 16),
                   ),
+                  if (sari.design?.title != null)
+                    Text(
+                      sari.design?.title ?? "",
+                      style: const TextStyle(fontSize: 12, height: 0.9),
+                    ),
+                  if (sari.rawSari?.title != null)
+                    Text(
+                      sari.rawSari?.title ?? "",
+                      style: const TextStyle(fontSize: 12, height: 1.5),
+                    ),
                   if (sari.rawSari?.material != null)
                     Text(
                       sari.rawSari?.material ?? "",
-                      style: const TextStyle(fontSize: 12, height: 0.9),
-                    ),
-                  if (sari.rawSari?.color != null)
-                    Text(
-                      sari.rawSari?.color ?? "",
-                      style: const TextStyle(fontSize: 12, height: 1.5),
+                      style: const TextStyle(fontSize: 12, height: 1),
                     ),
                 ],
               ),

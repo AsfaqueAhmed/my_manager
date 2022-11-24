@@ -1,14 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:my_manager/models/design.dart';
 import 'package:my_manager/models/designed_sari.dart';
 import 'package:my_manager/models/raw_sari.dart';
-import 'package:my_manager/models/supplier.dart';
+import 'package:my_manager/screens/raw_sari/controllers/raw_sari_controller.dart';
 import 'package:my_manager/services/designed_sari_service.dart';
 import 'package:my_manager/services/file_upload_service.dart';
-import 'package:my_manager/services/raw_sari_service.dart';
 import 'package:my_manager/utility/loading.dart';
 import 'package:my_manager/utility/toaster.dart';
+
+import '../../design/controllers/design_controller.dart';
 
 class AddEditDesignedSariController extends GetxController {
   late TextEditingController titleController,
@@ -22,6 +24,15 @@ class AddEditDesignedSariController extends GetxController {
   DesignedSari? designedSari = Get.arguments;
   RxBool canEdit = true.obs;
 
+  Rx<Design?> design = Rx<Design?>(null);
+
+  Rx<RawSari?> rawSari = Rx<RawSari?>(null);
+
+  List<Design> get designList =>
+      Get.find<DesignController>().designList.value ?? [];
+
+  List<RawSari> get rawSariList =>
+      Get.find<RawSariController>().rawSariList.value ?? [];
 
   @override
   void onInit() {
@@ -30,9 +41,13 @@ class AddEditDesignedSariController extends GetxController {
     priceController = TextEditingController(text: designedSari?.costing);
     detailsController = TextEditingController(text: designedSari?.details);
     quantityController =
-        TextEditingController(text: designedSari?.quantity.toString()??'0');
+        TextEditingController(text: designedSari?.quantity.toString() ?? '0');
+    design.value = designedSari?.design;
+    rawSari.value = designedSari?.rawSari;
     canEdit.value = (designedSari == null);
-    if (designedSari?.images != null) imageUrls([...(designedSari!.images ?? [])]);
+    if (designedSari?.images != null) {
+      imageUrls([...(designedSari!.images ?? [])]);
+    }
   }
 
   @override
@@ -46,13 +61,17 @@ class AddEditDesignedSariController extends GetxController {
   save() async {
     if (titleController.text.isEmpty ||
         priceController.text.isEmpty ||
-        int.tryParse(quantityController.text) == null) return;
+        int.tryParse(quantityController.text) == null ||
+        rawSari.value == null ||
+        design.value == null) return;
     try {
       DesignedSari designedSari = DesignedSari(
         title: titleController.text,
         details: detailsController.text,
         costing: priceController.text,
         quantity: int.parse(quantityController.text),
+        design: design.value,
+        rawSari: rawSari.value,
       );
       if (this.designedSari != null) {
         designedSari.id = this.designedSari!.id;

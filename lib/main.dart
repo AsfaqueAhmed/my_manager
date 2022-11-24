@@ -8,7 +8,7 @@ import 'package:my_manager/utility/colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  initServices();
+  await initServices();
 
   runApp(
     GetMaterialApp(
@@ -24,7 +24,7 @@ void main() async {
   );
 }
 
-void initServices() async {
-  await Get.put(FirebaseService()).init();
+initServices() async {
+  await FirebaseService().init();
   GetStorage.init();
 }

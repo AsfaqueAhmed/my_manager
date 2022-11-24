@@ -26,7 +26,7 @@ class DesignedSari {
     return DesignedSari(
       title: json['title'],
       details: json['details'],
-      images: json['images'] as List<String>?,
+      images: json['images'].cast<String>(),
       quantity: json['quantity'],
       costing: json['costing'],
       rawSari: json['rawSari'] is Map<String, dynamic>

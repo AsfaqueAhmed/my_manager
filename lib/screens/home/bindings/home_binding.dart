@@ -12,13 +12,14 @@ import '../controllers/home_controller.dart';
 class HomeBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HomeController>(() => HomeController());
-    Get.lazyPut<OrderController>(() => OrderController());
-    Get.lazyPut<SupplyController>(() => SupplyController());
-    Get.lazyPut<RawSariController>(() => RawSariController());
+    Get.lazyPut<HomeController>(() => HomeController(), fenix: true);
+    Get.lazyPut<OrderController>(() => OrderController(), fenix: true);
+    Get.lazyPut<SupplyController>(() => SupplyController(), fenix: true);
+    Get.lazyPut<RawSariController>(() => RawSariController(), fenix: true);
     Get.lazyPut<SupplierController>(() => SupplierController(), fenix: true);
     Get.lazyPut<CustomerController>(() => CustomerController(), fenix: true);
     Get.lazyPut<DesignController>(() => DesignController(), fenix: true);
-    Get.lazyPut<DesignedSariController>(() => DesignedSariController());
+    Get.lazyPut<DesignedSariController>(() => DesignedSariController(),
+        fenix: true);
   }
 }

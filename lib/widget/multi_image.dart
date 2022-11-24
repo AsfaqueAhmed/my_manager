@@ -5,11 +5,13 @@ import 'package:get/get.dart';
 class MultiImage extends StatelessWidget {
   final List<String>? images;
   final double size;
+  final int imageCount;
 
   const MultiImage({
     Key? key,
     required this.images,
     this.size = 60,
+    this.imageCount = 4,
   }) : super(key: key);
 
   @override
@@ -17,11 +19,11 @@ class MultiImage extends StatelessWidget {
     if (images == null || images!.isEmpty) return SizedBox(height: size);
     var factor = .33;
     return SizedBox(
-      width: (size * (1 + factor * (images!.length - 1)))
-          .clamp(0, size * (1 + factor * 3)),
+      width:
+          (size * (1 + factor * (images!.length.clamp(0, imageCount) - 1))),
       height: size,
       child: Stack(
-        children: List.generate(images!.length.clamp(0, 4), (index) {
+        children: List.generate(images!.length.clamp(0, imageCount), (index) {
           return Positioned(
             right: index * factor * size,
             child: Container(
