@@ -4,10 +4,13 @@ import 'package:my_manager/models/designed_sari.dart';
 import 'package:my_manager/widget/multi_image.dart';
 
 class DesignedSariTile extends StatelessWidget {
+  final bool showCount;
+
   const DesignedSariTile({
     Key? key,
     required this.sari,
     this.onTap,
+    this.showCount = true,
   }) : super(key: key);
 
   final DesignedSari sari;
@@ -57,26 +60,27 @@ class DesignedSariTile extends StatelessWidget {
               images: sari.images,
               size: 60,
             ),
-            const SizedBox(width: 8),
-            CircleAvatar(
-              radius: 22,
-              backgroundColor: Get.theme.primaryColor,
-              child: CircleAvatar(
-                radius: 20,
-                backgroundColor: Get.theme.scaffoldBackgroundColor,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Center(
-                    child: FittedBox(
-                      child: Text(
-                        sari.quantity.toString(),
-                        style: TextStyle(color: Get.theme.primaryColor),
+            if (showCount) const SizedBox(width: 8),
+            if (showCount)
+              CircleAvatar(
+                radius: 22,
+                backgroundColor: Get.theme.primaryColor,
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Get.theme.scaffoldBackgroundColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Center(
+                      child: FittedBox(
+                        child: Text(
+                          sari.quantity.toString(),
+                          style: TextStyle(color: Get.theme.primaryColor),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:my_manager/models/customer.dart';
 import 'package:my_manager/models/designed_sari.dart';
 import 'package:my_manager/models/order.dart';
 import 'package:my_manager/models/ordered_sari.dart';
+import 'package:my_manager/screens/order/components/order_item_quantity_price_update_ui.dart';
 import 'package:my_manager/services/order_service.dart';
 import 'package:my_manager/utility/loading.dart';
 import 'package:my_manager/utility/toaster.dart';
@@ -72,8 +73,37 @@ class AddEditOrderController extends GetxController {
   }
 
   void onNewItemAdd(DesignedSari sari) {
+    if (orderedSari.value
+        .any((element) => element.designedSari.id == sari.id)) {
+      orderedSari.update((val) {
+        OrderedSari orderedSari =
+            val!.firstWhere((element) => element.designedSari.id == sari.id);
+        orderedSari.quantity++;
+      });
+    } else {
+      orderedSari.update((val) {
+        val!.add(OrderedSari(designedSari: sari, quantity: 1, unitPrice: 950));
+      });
+    }
+  }
+
+  onRemoveOrderedSari(OrderedSari sari) {
     orderedSari.update((val) {
-      val!.add(OrderedSari(designedSari: sari, quantity: 1, unitPrice: 950));
+      val!.remove(sari);
+    });
+  }
+
+  onEditOrderedSari(OrderedSari sari) {
+    Get.dialog(OrderedItemQuantityPriceUpdate(orderedSari: sari))
+        .then((result) {
+      if (result != null) {
+        orderedSari.update((val) {
+          OrderedSari orderedSari = val!.firstWhere(
+              (element) => element.designedSari.id == sari.designedSari.id);
+          orderedSari.quantity = result['quantity'];
+          orderedSari.unitPrice = result['price'];
+        });
+      }
     });
   }
 }

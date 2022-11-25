@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_manager/models/ordered_sari.dart';
-import 'package:my_manager/screens/designed_sari/component/designed_raw_sari_title.dart';
 import 'package:my_manager/screens/order/components/add_new_product_ui.dart';
 import 'package:my_manager/screens/order/components/ordered_sari_tile.dart';
 import 'package:my_manager/screens/supplier/controllers/supplier_controller.dart';
@@ -99,9 +98,16 @@ class AddEditOrderView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      ...saris.map((sari) => DesignedSariTile(sari: sari.designedSari)),
-                      if (saris.isNotEmpty && canEdit)
-                        const SizedBox(height: 16),
+                      ...saris.map((sari) => Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
+                        child: OrderedSariTile(
+                              orderedSari: sari,
+                              onRemove: () =>
+                                  controller.onRemoveOrderedSari(sari),
+                              onEdit: () =>
+                                  controller.onEditOrderedSari(sari),
+                            ),
+                      )),
                       if (canEdit)
                         AddNewProductUi(
                           onDesignPicked: controller.onNewItemAdd,
