@@ -8,18 +8,18 @@ import 'package:my_manager/services/order_service.dart';
 class OrderController extends GetxController {
   late StreamSubscription _streamSubscription;
 
-  Rx<List<Order>?> designedSariList = Rx(null);
+  Rx<List<Order>?> orderList = Rx(null);
 
-  var designedSariCollection = OrderService().collection;
+  var orderCollection = OrderService().collection;
 
   @override
   void onInit() {
     super.onInit();
     _streamSubscription =
-        designedSariCollection.orderBy("title").snapshots().listen((snapShot) {
-      designedSariList.value = [];
+        orderCollection.snapshots().listen((snapShot) {
+      orderList.value = [];
       if (snapShot.size > 0) {
-        designedSariList.value =
+        orderList.value =
             snapShot.docs.map((e) => Order.fromJson(json: e.data())).toList();
       }
     });

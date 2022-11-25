@@ -63,22 +63,29 @@ class AddEditOrderView extends StatelessWidget {
           body: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             children: [
-              TextInputWidget(
-                hint: "কাস্টমার নাম",
-                controller: controller.customerNameController,
-                enable: canEdit,
+              GestureDetector(
+                onTap: canEdit ? controller.selectCustomer : null,
+                child: TextInputWidget(
+                  hint: "কাস্টমার নাম",
+                  controller: controller.customerNameController,
+                  enable: false,
+                ),
               ),
               const SizedBox(height: 20),
-              TextInputWidget(
-                hint: "কাস্টমার নাম্বার",
-                controller: controller.customerNumberController,
-                enable: canEdit,
+              Obx(
+                () => TextInputWidget(
+                  hint: "কাস্টমার নাম্বার",
+                  controller: controller.customerNumberController,
+                  enable: canEdit && controller.selectedCustomer.value == null,
+                ),
               ),
               const SizedBox(height: 20),
-              TextInputWidget(
-                hint: "কাস্টমার এড্রেস",
-                controller: controller.customerAddressController,
-                enable: canEdit,
+              Obx(
+                () => TextInputWidget(
+                  hint: "কাস্টমার এড্রেস",
+                  controller: controller.customerAddressController,
+                  enable: canEdit && controller.selectedCustomer.value == null,
+                ),
               ),
               const SizedBox(height: 4),
               Obx(
@@ -99,15 +106,14 @@ class AddEditOrderView extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       ...saris.map((sari) => Padding(
-                        padding: const EdgeInsets.only(bottom: 20.0),
-                        child: OrderedSariTile(
+                            padding: const EdgeInsets.only(bottom: 20.0),
+                            child: OrderedSariTile(
                               orderedSari: sari,
                               onRemove: () =>
                                   controller.onRemoveOrderedSari(sari),
-                              onEdit: () =>
-                                  controller.onEditOrderedSari(sari),
+                              onEdit: () => controller.onEditOrderedSari(sari),
                             ),
-                      )),
+                          )),
                       if (canEdit)
                         AddNewProductUi(
                           onDesignPicked: controller.onNewItemAdd,
@@ -119,7 +125,7 @@ class AddEditOrderView extends StatelessWidget {
               const SizedBox(height: 20),
               TextInputWidget(
                 hint: "বিবরণ",
-                controller: controller.customerNumberController,
+                controller: controller.detailsController,
                 enable: canEdit,
                 lines: 3,
               ),

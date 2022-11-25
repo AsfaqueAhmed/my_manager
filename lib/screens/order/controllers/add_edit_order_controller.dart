@@ -4,6 +4,7 @@ import 'package:my_manager/models/customer.dart';
 import 'package:my_manager/models/designed_sari.dart';
 import 'package:my_manager/models/order.dart';
 import 'package:my_manager/models/ordered_sari.dart';
+import 'package:my_manager/screens/order/components/customer_picker.dart';
 import 'package:my_manager/screens/order/components/order_item_quantity_price_update_ui.dart';
 import 'package:my_manager/services/order_service.dart';
 import 'package:my_manager/utility/loading.dart';
@@ -19,6 +20,8 @@ class AddEditOrderController extends GetxController {
 
   Order? order = Get.arguments;
   RxBool canEdit = true.obs;
+
+  Rx<Customer?> selectedCustomer = Rx(null);
 
   @override
   void onInit() {
@@ -47,11 +50,12 @@ class AddEditOrderController extends GetxController {
         customerNumberController.text.isEmpty ||
         orderedSari.value.isEmpty) return;
     try {
-      var customer = Customer(
-        name: customerNameController.text,
-        mobileNumber: customerNumberController.text,
-        address: customerAddressController.text,
-      );
+      var customer = selectedCustomer.value ??
+          Customer(
+            name: customerNameController.text,
+            mobileNumber: customerNumberController.text,
+            address: customerAddressController.text,
+          );
       Order order = Order(
         sari: orderedSari.value,
         customer: customer,
@@ -103,6 +107,24 @@ class AddEditOrderController extends GetxController {
           orderedSari.quantity = result['quantity'];
           orderedSari.unitPrice = result['price'];
         });
+      }
+    });
+  }
+
+  selectCustomer() {
+    Get.bottomSheet(CustomerPicker(customer: selectedCustomer.value))
+        .then((result) {
+      if (result is Customer) {
+        selectedCustomer.value = result;
+        customerNameController.text = result.name;
+        customerNumberController.text = result.mobileNumber ?? '';
+        customerAddressController.text = result.address ?? '';
+      }
+      if (result is String) {
+        selectedCustomer.value = null;
+        customerNameController.text = result;
+        customerNumberController.text = '';
+        customerAddressController.text = '';
       }
     });
   }
