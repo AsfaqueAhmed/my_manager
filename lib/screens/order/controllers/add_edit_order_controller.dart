@@ -6,6 +6,7 @@ import 'package:my_manager/models/order.dart';
 import 'package:my_manager/models/ordered_sari.dart';
 import 'package:my_manager/screens/order/components/customer_picker.dart';
 import 'package:my_manager/screens/order/components/order_item_quantity_price_update_ui.dart';
+import 'package:my_manager/services/customer_service.dart';
 import 'package:my_manager/services/order_service.dart';
 import 'package:my_manager/utility/loading.dart';
 import 'package:my_manager/utility/toaster.dart';
@@ -56,6 +57,7 @@ class AddEditOrderController extends GetxController {
             mobileNumber: customerNumberController.text,
             address: customerAddressController.text,
           );
+
       Order order = Order(
         sari: orderedSari.value,
         customer: customer,
@@ -66,6 +68,10 @@ class AddEditOrderController extends GetxController {
       }
 
       Loading.show();
+      if (selectedCustomer.value == null) {
+        await CustomerService().addCustomer(customer);
+      }
+
       await OrderService().updateOrder(order);
       Loading.hide();
       Get.back();

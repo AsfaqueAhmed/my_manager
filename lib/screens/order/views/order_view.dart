@@ -16,7 +16,6 @@ class OrderView extends StatelessWidget {
     return Scaffold(
       body: Obx(() {
         var orderList = controller.orderList.value;
-        print(controller.orderList.value);
         if (orderList == null) return const Center(child: Loading());
         if (orderList.isEmpty) {
           return const EmptyList();

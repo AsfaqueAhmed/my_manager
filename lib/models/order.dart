@@ -12,32 +12,39 @@ class Order {
 
   String? details;
 
+  OrderStatus status;
+
   Order({
     this.orderDate,
     this.deliveryDate,
     this.shippingDate,
     this.details,
+    this.status = OrderStatus.pending,
     required this.sari,
     required this.customer,
   });
 
   factory Order.fromJson({required Map<String, dynamic> json}) {
     return Order(
-      orderDate: json['orderDate'] is int
-          ? DateTime.fromMillisecondsSinceEpoch(json['orderDate'])
-          : null,
-      deliveryDate: json['receiveDate'] is int
-          ? DateTime.fromMillisecondsSinceEpoch(json['receiveDate'])
-          : null,
-      shippingDate: json['shippingDate'] is int
-          ? DateTime.fromMillisecondsSinceEpoch(json['shippingDate'])
-          : null,
-      sari: json['sari'] is List<Map<String, dynamic>>
-          ? json['sari'].map((e) => OrderedSari.fromJson(json: e)).toList()
-          : null,
-      details: json['details'],
-      customer: Customer.fromJson(json: json['customer']),
-    )..id = json['id'];
+        orderDate: json['orderDate'] is int
+            ? DateTime.fromMillisecondsSinceEpoch(json['orderDate'])
+            : null,
+        deliveryDate: json['receiveDate'] is int
+            ? DateTime.fromMillisecondsSinceEpoch(json['receiveDate'])
+            : null,
+        shippingDate: json['shippingDate'] is int
+            ? DateTime.fromMillisecondsSinceEpoch(json['shippingDate'])
+            : null,
+        sari: json['sari'] is List
+            ? json['sari']
+                .map((e) => OrderedSari.fromJson(json: e))
+                .toList()
+                .cast<OrderedSari>()
+            : [],
+        details: json['details'],
+        customer: Customer.fromJson(json: json['customer']),
+        status: OrderStatus.values.find(json['status']))
+      ..id = json['id'];
   }
 
   Map<String, dynamic> toJson() => {
@@ -48,5 +55,17 @@ class Order {
         'details': details,
         'customer': customer.toJson(),
         'sari': sari.map((e) => e.toJson()).toList(),
+        'status': status.index,
       };
+}
+
+enum OrderStatus { pending, processing, send, canceled, none }
+
+extension Search on List<OrderStatus> {
+  OrderStatus find(int index) {
+    return firstWhere(
+      (element) => element.index == index,
+      orElse: () => OrderStatus.pending,
+    );
+  }
 }
