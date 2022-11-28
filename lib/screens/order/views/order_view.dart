@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_manager/config/colors.dart';
+import 'package:my_manager/config/enums.dart';
+import 'package:my_manager/config/extension.dart';
 import 'package:my_manager/screens/order/components/order_tile.dart';
 import 'package:my_manager/utility/loading.dart';
 import 'package:my_manager/widget/empty_list.dart';
@@ -14,22 +17,77 @@ class OrderView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Obx(() {
-        var orderList = controller.orderList.value;
-        if (orderList == null) return const Center(child: Loading());
-        if (orderList.isEmpty) {
-          return const EmptyList();
-        }
-        return ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          itemBuilder: (context, index) {
-            var order = orderList[index];
-            return OrderTile(order: order);
-          },
-          itemCount: orderList.length,
-        );
-      }),
+      body: Column(
+        children: [
+          _tabs(),
+          Expanded(
+            child: Obx(() {
+              var orderList = controller.orderList.value;
+              if (orderList == null) return const Center(child: Loading());
+              if (orderList.isEmpty) {
+                return const EmptyList();
+              }
+              return ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 12) +
+                    const EdgeInsets.only(bottom: 80),
+                physics: const BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  var order = orderList[index];
+                  return OrderTile(
+                    order: order,
+                    onTap: () => controller.showOrderDetails(order),
+                  );
+                },
+                itemCount: orderList.length,
+              );
+            }),
+          ),
+        ],
+      ),
       floatingActionButton: _floatingActionButton(),
+    );
+  }
+
+  Obx _tabs() {
+    return Obx(
+      () => Row(
+        children: OrderStatus.values.map((status) => _tab(status)).toList(),
+      ),
+    );
+  }
+
+  Expanded _tab(OrderStatus status) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => controller.switchTab(status),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: controller.selectedTab.value == status
+                    ? Get.theme.primaryColor
+                    : AppColors.disable,
+                width: controller.selectedTab.value == status ? 2 : 1,
+              ),
+            ),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Center(
+              child: FittedBox(
+            child: Text(
+              status.value,
+              style: TextStyle(
+                color: controller.selectedTab.value == status
+                    ? Get.theme.primaryColor
+                    : AppColors.disable,
+                fontWeight: controller.selectedTab.value == status
+                    ? FontWeight.bold
+                    : FontWeight.w200,
+              ),
+            ),
+          )),
+        ),
+      ),
     );
   }
 

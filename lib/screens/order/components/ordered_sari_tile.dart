@@ -43,6 +43,8 @@ class OrderedSariTile extends StatelessWidget {
                       Text(
                         sari.title,
                         style: const TextStyle(fontSize: 16),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       if (sari.design?.title != null)
                         Text(

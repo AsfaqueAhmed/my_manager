@@ -73,19 +73,24 @@ class AddEditOrderView extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Obx(
-                () => TextInputWidget(
-                  hint: "কাস্টমার নাম্বার",
-                  controller: controller.customerNumberController,
-                  enable: canEdit && controller.selectedCustomer.value == null,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Obx(
-                () => TextInputWidget(
-                  hint: "কাস্টমার এড্রেস",
-                  controller: controller.customerAddressController,
-                  enable: canEdit && controller.selectedCustomer.value == null,
-                ),
+                () {
+                  var oldCustomer = controller.selectedCustomer.value == null;
+                  return Column(
+                    children: [
+                      TextInputWidget(
+                        hint: "কাস্টমার এড্রেস",
+                        controller: controller.customerAddressController,
+                        enable: canEdit && oldCustomer,
+                      ),
+                      const SizedBox(height: 20),
+                      TextInputWidget(
+                        hint: "কাস্টমার নাম্বার",
+                        controller: controller.customerNumberController,
+                        enable: canEdit && oldCustomer,
+                      ),
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: 4),
               Obx(
@@ -109,9 +114,12 @@ class AddEditOrderView extends StatelessWidget {
                             padding: const EdgeInsets.only(bottom: 20.0),
                             child: OrderedSariTile(
                               orderedSari: sari,
-                              onRemove: () =>
-                                  controller.onRemoveOrderedSari(sari),
-                              onEdit: () => controller.onEditOrderedSari(sari),
+                              onRemove: controller.canEdit.value
+                                  ? () => controller.onRemoveOrderedSari(sari)
+                                  : null,
+                              onEdit: controller.canEdit.value
+                                  ? () => controller.onEditOrderedSari(sari)
+                                  : null,
                             ),
                           )),
                       if (canEdit)

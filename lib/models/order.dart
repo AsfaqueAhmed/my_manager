@@ -52,7 +52,7 @@ class Order {
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'orderDate': orderDate?.millisecondsSinceEpoch,
+        'orderDate': orderDate?.millisecondsSinceEpoch??DateTime.now().millisecondsSinceEpoch,
         'receiveDate': deliveryDate?.millisecondsSinceEpoch,
         'shippingDate': shippingDate?.millisecondsSinceEpoch,
         'details': details,
