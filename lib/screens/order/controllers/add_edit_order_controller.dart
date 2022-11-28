@@ -68,7 +68,7 @@ class AddEditOrderController extends GetxController {
       }
 
       Loading.show();
-      if (selectedCustomer.value == null) {
+      if (this.order == null && selectedCustomer.value == null) {
         await CustomerService().addCustomer(customer);
       }
 

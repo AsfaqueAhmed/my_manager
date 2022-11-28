@@ -3,7 +3,12 @@ import 'package:my_manager/config/colors.dart';
 import 'package:my_manager/config/enums.dart';
 
 extension DateToString on DateTime {
-  String get formattedDate => '$day/$month/$year';
+  String get formattedDate =>
+      '$day/$month/$year @${(hour % 12 == 0 ? 12 : hour % 12).padded()}:${minute.padded()} ${hour>=12?"PM":"AM"}';
+}
+
+extension PaddedInt on int {
+  padded([int length = 2]) => toString().padLeft(length, '0');
 }
 
 extension Value on Enum {
