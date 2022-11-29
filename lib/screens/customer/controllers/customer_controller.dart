@@ -17,6 +17,7 @@ class CustomerController extends GetxController {
     super.onInit();
     _streamSubscription =
         customerCollection.orderBy("title").snapshots().listen((snapShot) {
+      customerList.value = [];
       if (snapShot.size > 0) {
         customerList.value = snapShot.docs
             .map((e) => Customer.fromJson(json: e.data()))

@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:my_manager/models/customer.dart';
 import 'package:my_manager/models/designed_sari.dart';
-import 'package:my_manager/models/raw_sari.dart';
 
 class DesignedSariService {
   static DesignedSariService? _instance;
@@ -16,7 +14,27 @@ class DesignedSariService {
 
   DesignedSariService._();
 
-  addNewSari(DesignedSari designedSari) async{
+  addNewSari(DesignedSari designedSari) async {
     await collection.doc(designedSari.id).set(designedSari.toJson());
+  }
+
+  Future<Map<String, int>> getQuantity(List<String> sariIds) async {
+    QuerySnapshot<Map<String, dynamic>> designedSari =
+        await collection.where('id', whereIn: sariIds).get();
+
+    Map<String, int> quantities = {};
+    for (var element in sariIds) {
+      quantities[element] = 0;
+    }
+
+    if (designedSari.size == 0) {
+      return quantities;
+    }
+
+    for (var element in designedSari.docs) {
+      quantities[element['id']] = element['quantity'];
+    }
+
+    return quantities;
   }
 }

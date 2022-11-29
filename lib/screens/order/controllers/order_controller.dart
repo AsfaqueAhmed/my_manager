@@ -4,8 +4,11 @@ import 'package:get/get.dart';
 import 'package:my_manager/config/enums.dart';
 import 'package:my_manager/config/extension.dart';
 import 'package:my_manager/models/order.dart';
+import 'package:my_manager/models/ordered_sari.dart';
 import 'package:my_manager/routes.dart';
+import 'package:my_manager/services/designed_sari_service.dart';
 import 'package:my_manager/services/order_service.dart';
+import 'package:my_manager/services/raw_sari_service.dart';
 import 'package:my_manager/widget/custom_picker.dart';
 
 class OrderController extends GetxController {
@@ -67,12 +70,47 @@ class OrderController extends GetxController {
       selectedType: order.status,
       getTitle: (status) => status.value,
       getId: (status) => status.value,
-    ).then((value) {
-      order.status = value;
-      if (value == OrderStatus.send) {
+    ).then((status) => _switchStatus(order, status));
+  }
+
+  Future _switchStatus(Order order, OrderStatus? status) async {
+    OrderStatus previousStatus = order.status;
+    if (status == null || status.index <= previousStatus.index) return;
+
+    List<OrderedSari> orderedSariList = [];
+    for (var sari in order.sari) {
+      orderedSariList.add(sari);
+    }
+
+    List<String> designedSariIdList = [];
+    for (var sari in order.sari) {
+      designedSariIdList.add(sari.designedSari.id);
+    }
+
+    List<String> rawSariIdList = [];
+    for (var sari in order.sari) {
+      designedSariIdList.add(sari.designedSari.id);
+    }
+
+    order.status = status;
+    switch (status) {
+      case OrderStatus.pending:
+        break;
+      case OrderStatus.processing:
+        Map<String, int> inStock =
+            await RawSariService().getQuantity(rawSariIdList);
+        break;
+      case OrderStatus.ready:
+        Map<String, int> inStock =
+            await DesignedSariService().getQuantity(designedSariIdList);
+        break;
+      case OrderStatus.send:
         order.deliveryDate = DateTime.now();
-      }
-      OrderService().updateOrder(order);
-    });
+        break;
+      case OrderStatus.canceled:
+        // TODO: Handle this case.
+        break;
+    }
+    OrderService().updateOrder(order);
   }
 }

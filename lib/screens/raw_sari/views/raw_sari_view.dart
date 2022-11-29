@@ -21,7 +21,8 @@ class RawSariView extends StatelessWidget {
           return const EmptyList();
         }
         return ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 12)+const EdgeInsets.only(bottom: 72),
+          physics: const BouncingScrollPhysics(),
           itemBuilder: (context, index) {
             var sari = rawSariList[index];
             return RawSariTile(

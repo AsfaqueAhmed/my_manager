@@ -16,7 +16,7 @@ class RawSariController extends GetxController {
   void onInit() {
     super.onInit();
     _streamSubscription =
-        rawSariCollection.orderBy("title").snapshots().listen((snapShot) {
+        rawSariCollection.orderBy("quantity",descending: true).snapshots().listen((snapShot) {
       rawSariList.value = [];
       if (snapShot.size > 0) {
         rawSariList.value =

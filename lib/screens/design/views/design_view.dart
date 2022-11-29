@@ -30,7 +30,8 @@ class DesignView extends StatelessWidget {
           return const EmptyList();
         }
         return ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 12)+const EdgeInsets.only(bottom: 72),
           itemBuilder: (context, index) {
             var design = designList[index];
             return DesignTile(
@@ -42,6 +43,7 @@ class DesignView extends StatelessWidget {
         );
       }),
       floatingActionButton: _floatingActionButton(),
+
     );
   }
 

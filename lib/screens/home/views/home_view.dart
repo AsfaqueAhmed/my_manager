@@ -12,40 +12,46 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: _drawer(),
-      appBar: AppBar(
-        title: Obx(
-          () => Text(
-            "${controller.items[controller.currentIndex.value]['label']}",
+    return WillPopScope(
+      onWillPop: () async {
+        controller.requestToExit();
+        return false;
+      },
+      child: Scaffold(
+        drawer: _drawer(),
+        appBar: AppBar(
+          title: Obx(
+            () => Text(
+              "${controller.items[controller.currentIndex.value]['label']}",
+            ),
+          ),
+          centerTitle: true,
+          leading: Builder(builder: (context) {
+            return IconButton(
+              icon: const Icon(
+                Icons.menu,
+                color: Colors.white,
+              ),
+              onPressed: () => controller.openDrawer(context),
+            );
+          }),
+        ),
+        body: Obx(
+          () => AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: controller.currentIndex.value == 0
+                ? OrderView()
+                : controller.currentIndex.value == 1
+                    ? DesignedSariView()
+                    : controller.currentIndex.value == 2
+                        ? RawSariView()
+                        : controller.currentIndex.value == 3
+                            ? SupplyView()
+                            : Container(),
           ),
         ),
-        centerTitle: true,
-        leading: Builder(builder: (context) {
-          return IconButton(
-            icon: const Icon(
-              Icons.menu,
-              color: Colors.white,
-            ),
-            onPressed: () => controller.openDrawer(context),
-          );
-        }),
+        bottomNavigationBar: _bottomBar(),
       ),
-      body: Obx(
-        () => AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          child: controller.currentIndex.value == 0
-              ? OrderView()
-              : controller.currentIndex.value == 1
-                  ? DesignedSariView()
-                  : controller.currentIndex.value == 2
-                      ? RawSariView()
-                      : controller.currentIndex.value == 3
-                          ? SupplyView()
-                          : Container(),
-        ),
-      ),
-      bottomNavigationBar: _bottomBar(),
     );
   }
 

@@ -126,10 +126,13 @@ class _ImageBox extends StatelessWidget {
       child: GestureDetector(
         onTap: file == null && fileUrl == null
             ? null
-            : () => ZoomedImage.show(
+            : () {
+          print("here ${file?.path}");
+                ZoomedImage.show(
                   url: fileUrl,
                   file: file,
-                ),
+                );
+              },
         child: Container(
           height: size,
           width: size,

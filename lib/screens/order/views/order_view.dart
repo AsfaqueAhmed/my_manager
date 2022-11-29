@@ -71,7 +71,8 @@ class OrderView extends StatelessWidget {
               ),
             ),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          height: 48,
           child: Center(
               child: FittedBox(
             child: Text(

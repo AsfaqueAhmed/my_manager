@@ -5,7 +5,7 @@ import 'package:my_manager/screens/designed_sari/component/designed_raw_sari_tit
 import 'package:my_manager/utility/loading.dart';
 import 'package:my_manager/widget/empty_list.dart';
 
-import '../controllers/designed_sari_controller.dart';
+import '../controllers/production_controller.dart';
 
 class DesignedSariView extends StatelessWidget {
   final DesignedSariController controller = Get.find<DesignedSariController>();

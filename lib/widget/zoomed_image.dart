@@ -10,7 +10,7 @@ class ZoomedImage extends StatelessWidget {
   final XFile? file;
 
   static show({String? url, XFile? file}) {
-    Get.dialog(ZoomedImage(url: url));
+    Get.dialog(ZoomedImage(url: url,file: file,));
   }
 
   const ZoomedImage({Key? key, this.url, this.file}) : super(key: key);
