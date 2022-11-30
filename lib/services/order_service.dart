@@ -14,7 +14,7 @@ class OrderService {
 
   OrderService._();
 
-  updateOrder(Order order) async {
+  addEditOrder(Order order) async {
     await collection.doc(order.id).set(order.toJson());
   }
 }

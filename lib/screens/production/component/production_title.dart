@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_manager/config/extension.dart';
 import 'package:my_manager/models/designed_sari.dart';
+import 'package:my_manager/models/production.dart';
+import 'package:my_manager/screens/production/controllers/production_controller.dart';
 import 'package:my_manager/widget/multi_image.dart';
 
-class DesignedSariTile extends StatelessWidget {
+class ProductionTile extends StatelessWidget {
   final bool showCount;
 
-  const DesignedSariTile({
+  const ProductionTile({
     Key? key,
-    required this.sari,
+    required this.item,
     this.onTap,
     this.showCount = true,
   }) : super(key: key);
 
-  final DesignedSari sari;
+  final ProductionItem item;
   final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
+    DesignedSari item = this.item.designedSari;
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -29,9 +33,22 @@ class DesignedSariTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              sari.title,
-              style: const TextStyle(fontSize: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    item.title,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: (){
+                    Get.find<ProductionController>()
+                        .showProductionStatusChangeDialog(this.item);
+                  },
+                  child: this.item.status.getUi(),
+                ),
+              ],
             ),
             Row(
               children: [
@@ -39,37 +56,37 @@ class DesignedSariTile extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (sari.design?.title != null)
+                      if (item.design?.title != null)
                         Text(
-                          sari.design?.title ?? "",
+                          item.design?.title ?? "",
                           style: const TextStyle(fontSize: 12, height: 0.9),
                         ),
-                      if (sari.rawSari?.title != null)
+                      if (item.rawSari?.title != null)
                         Text(
-                          sari.rawSari?.title ?? "",
+                          item.rawSari?.title ?? "",
                           style: const TextStyle(fontSize: 12, height: 1.5),
                         ),
-                      if (sari.rawSari?.material != null)
+                      if (item.rawSari?.material != null)
                         Text(
-                          sari.rawSari?.material ?? "",
+                          item.rawSari?.material ?? "",
                           style: const TextStyle(fontSize: 12, height: 1),
                         ),
                     ],
                   ),
                 ),
                 MultiImage(
-                  images: sari.images ?? [],
-                  size: 60,
+                  images: item.images ?? [],
+                  size: 48,
                   imageCount: 1,
                 ),
                 MultiImage(
-                  images: sari.design?.images ?? [],
-                  size: 60,
+                  images: item.design?.images ?? [],
+                  size: 48,
                   imageCount: 1,
                 ),
                 MultiImage(
-                  images: sari.rawSari?.images ?? [],
-                  size: 60,
+                  images: item.rawSari?.images ?? [],
+                  size: 48,
                   imageCount: 1,
                 ),
                 if (showCount) const SizedBox(width: 8),
@@ -85,7 +102,7 @@ class DesignedSariTile extends StatelessWidget {
                         child: Center(
                           child: FittedBox(
                             child: Text(
-                              sari.quantity.toString(),
+                              this.item.quantity.toString(),
                               style: TextStyle(color: Get.theme.primaryColor),
                             ),
                           ),

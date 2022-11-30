@@ -26,10 +26,10 @@ class HomeController extends GetxController {
       "image": "cart",
       "label": "সাপ্লায়",
     },
-    /*{
+    {
       "image": "factory",
       "label": "কারখানা",
-    },*/
+    },
   ];
 
   void toCustomerList() => _closeDrawerAndNavigateTo(Routes.customerList);

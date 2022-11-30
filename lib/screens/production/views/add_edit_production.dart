@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_manager/models/design.dart';
-import 'package:my_manager/models/raw_sari.dart';
-import 'package:my_manager/screens/design/component/design_title.dart';
-import 'package:my_manager/screens/raw_sari/component/raw_sari_title.dart';
-import 'package:my_manager/screens/supplier/controllers/supplier_controller.dart';
+import 'package:my_manager/models/designed_sari.dart';
+import 'package:my_manager/screens/designed_sari/component/designed_raw_sari_title.dart';
 import 'package:my_manager/widget/custom_button.dart';
 import 'package:my_manager/widget/custom_dropdown_input_area.dart';
-import 'package:my_manager/widget/image_input_area.dart';
+import 'package:my_manager/widget/multi_image.dart';
 import 'package:my_manager/widget/text_input_widget.dart';
 
 import '../controllers/add_edit_production_controller.dart';
 
-class AddEditDesignedSariView extends StatelessWidget {
-  final AddEditDesignedSariController controller =
-      Get.put(AddEditDesignedSariController());
-  final supplierController = Get.find<SupplierController>();
+class AddEditProductionItem extends StatelessWidget {
+  final AddEditProductionController controller =
+      Get.put(AddEditProductionController());
 
-  AddEditDesignedSariView({Key? key}) : super(key: key);
+  AddEditProductionItem({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +23,13 @@ class AddEditDesignedSariView extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: Builder(builder: (c) {
-              if (controller.designedSari == null) {
-                return const Text("নতুন ডিজাইনড শাড়ি");
+              if (controller.productionItem == null) {
+                return const Text("নতুন প্রডাক্ট");
               }
               if (canEdit) {
-                return const Text("ডিজাইনড শাড়ি এডিট");
+                return const Text("প্রডাক্ট এডিট");
               }
-              return Text(controller.designedSari!.title);
+              return Text(controller.productionItem!.designedSari.title);
             }),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios),
@@ -41,7 +37,7 @@ class AddEditDesignedSariView extends StatelessWidget {
               onPressed: () => Get.back(),
             ),
             actions: [
-              if (controller.designedSari != null)
+              if (controller.productionItem != null)
                 Builder(builder: (c) {
                   if (!canEdit) {
                     return IconButton(
@@ -67,42 +63,67 @@ class AddEditDesignedSariView extends StatelessWidget {
           body: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             children: [
-              TextInputWidget(
-                hint: "টাইটেল",
-                controller: controller.titleController,
-                enable: canEdit,
-              ),
-              const SizedBox(height: 20),
               Obx(
-                () => CustomDropDownInputArea<RawSari>(
-                  title: "শাড়ি",
-                  enable: canEdit,
-                  selectedItem: controller.rawSari.value,
-                  onSelect: controller.rawSari,
-                  getId: (sari) => sari.id,
-                  items: controller.rawSariList,
-                  pickerItemBuilder: (design) => RawSariTile(sari: design,removeCount:true),
-                  pickedItemBuilder: (design) => RawSariTile(sari: design,removeBorder: true,removeCount:true),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Obx(
-                () => CustomDropDownInputArea<Design>(
+                () => CustomDropDownInputArea<DesignedSari>(
                   title: "ডিজাইন",
                   enable: canEdit,
-                  selectedItem: controller.design.value,
-                  onSelect: controller.design,
+                  selectedItem: controller.designedSari.value,
+                  onSelect: controller.designedSari,
                   getId: (design) => design.id,
-                  items: controller.designList,
-                  pickerItemBuilder: (design) => DesignTile(design: design),
-                  pickedItemBuilder: (design) => DesignTile(design: design,removeBorder: true,),
+                  items: controller.designedSariList,
+                  pickerItemBuilder: (sari) => DesignedSariTile(
+                    sari: sari,
+                    showCount: false,
+                  ),
+                  pickedItemBuilder: (sari) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        sari.title,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (sari.design?.title != null)
+                                  Text(
+                                    sari.design?.title ?? "",
+                                    style: const TextStyle(
+                                        fontSize: 12, height: 0.9),
+                                  ),
+                                if (sari.rawSari?.title != null)
+                                  Text(
+                                    sari.rawSari?.title ?? "",
+                                    style: const TextStyle(
+                                        fontSize: 12, height: 1.5),
+                                  ),
+                                if (sari.rawSari?.material != null)
+                                  Text(
+                                    sari.rawSari?.material ?? "",
+                                    style: const TextStyle(
+                                        fontSize: 12, height: 1),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          MultiImage(
+                            images: sari.design?.images ?? [],
+                            size: 48,
+                            imageCount: 1,
+                          ),
+                          MultiImage(
+                            images: sari.rawSari?.images ?? [],
+                            size: 48,
+                            imageCount: 1,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextInputWidget(
-                hint: "দাম",
-                controller: controller.priceController,
-                enable: canEdit,
               ),
               const SizedBox(height: 20),
               TextInputWidget(
@@ -113,33 +134,11 @@ class AddEditDesignedSariView extends StatelessWidget {
                   signed: false,
                 ),
               ),
-              const SizedBox(height: 12),
-              if (controller.designedSari?.images != null &&
-                  controller.designedSari!.images!.isNotEmpty &&
-                  controller.images.value.isNotEmpty)
-                const SizedBox(height: 20),
-              Obx(
-                () => ImageInputArea(
-                  title: "ছবি",
-                  initialFiles: controller.images.value,
-                  initialImageLink: controller.imageUrls.value,
-                  onImageAdded: controller.onImageAdded,
-                  onFileRemove: controller.onFileRemoved,
-                  enable: canEdit,
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextInputWidget(
-                hint: "বিবরণ",
-                controller: controller.detailsController,
-                enable: canEdit,
-                lines: 3,
-              ),
               if (canEdit) const SizedBox(height: 32),
               if (canEdit)
                 CustomButton(
                   onPressed: controller.save,
-                  buttonText: "শাড়ি যোগ করুন",
+                  buttonText: "প্রোডাক্ট যোগ করুন",
                   textColor: Colors.white,
                 )
             ],

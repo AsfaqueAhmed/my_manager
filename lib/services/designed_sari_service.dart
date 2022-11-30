@@ -37,4 +37,13 @@ class DesignedSariService {
 
     return quantities;
   }
+
+  Future updateQuantity(Map<String, int> updatedQuantity) async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    WriteBatch batch = db.batch();
+    updatedQuantity.forEach((key, value) {
+      batch.update(collection.doc(key), {'quantity': value});
+    });
+    await batch.commit();
+  }
 }

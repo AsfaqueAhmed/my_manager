@@ -72,7 +72,7 @@ class AddEditOrderController extends GetxController {
         await CustomerService().addCustomer(customer);
       }
 
-      await OrderService().updateOrder(order);
+      await OrderService().addEditOrder(order);
       Loading.hide();
       Get.back();
       Toaster.success("শাড়ি সংযোজন সফল");

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_manager/config/colors.dart';
 import 'package:my_manager/config/enums.dart';
 import 'package:my_manager/config/extension.dart';
 import 'package:my_manager/screens/order/components/order_tile.dart';
+import 'package:my_manager/services/tab.dart';
 import 'package:my_manager/utility/loading.dart';
 import 'package:my_manager/widget/empty_list.dart';
 
@@ -19,7 +19,12 @@ class OrderView extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          _tabs(),
+          MyTabBar<OrderStatus>(
+            selectedTab: controller.selectedTab,
+            tabs: OrderStatus.values,
+            onSwitchTab: controller.switchTab,
+            getTitle: (e) => e.value,
+          ),
           Expanded(
             child: Obx(() {
               var orderList = controller.orderList.value;
@@ -48,49 +53,6 @@ class OrderView extends StatelessWidget {
     );
   }
 
-  Obx _tabs() {
-    return Obx(
-      () => Row(
-        children: OrderStatus.values.map((status) => _tab(status)).toList(),
-      ),
-    );
-  }
-
-  Expanded _tab(OrderStatus status) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => controller.switchTab(status),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: controller.selectedTab.value == status
-                    ? Get.theme.primaryColor
-                    : AppColors.disable,
-                width: controller.selectedTab.value == status ? 2 : 1,
-              ),
-            ),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          height: 48,
-          child: Center(
-              child: FittedBox(
-            child: Text(
-              status.value,
-              style: TextStyle(
-                color: controller.selectedTab.value == status
-                    ? Get.theme.primaryColor
-                    : AppColors.disable,
-                fontWeight: controller.selectedTab.value == status
-                    ? FontWeight.bold
-                    : FontWeight.w200,
-              ),
-            ),
-          )),
-        ),
-      ),
-    );
-  }
 
   _floatingActionButton() {
     return FloatingActionButton.extended(

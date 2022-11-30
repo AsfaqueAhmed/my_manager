@@ -4,7 +4,7 @@ import 'package:my_manager/config/enums.dart';
 
 extension DateToString on DateTime {
   String get formattedDate =>
-      '$day/$month/$year @${(hour % 12 == 0 ? 12 : hour % 12).padded()}:${minute.padded()} ${hour>=12?"PM":"AM"}';
+      '$day/$month/$year @${(hour % 12 == 0 ? 12 : hour % 12).padded()}:${minute.padded()} ${hour >= 12 ? "PM" : "AM"}';
 }
 
 extension PaddedInt on int {
@@ -36,23 +36,7 @@ extension Search<T extends Enum> on List<T> {
 }
 
 extension Ui on OrderStatus {
-  Widget getUi() => Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 8,
-          vertical: 1,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: color,
-        ),
-        child: Text(
-          value,
-          style: const TextStyle(
-            fontSize: 10,
-            color: Colors.white,
-          ),
-        ),
-      );
+  Widget getUi() => _container(value, color);
 
   Color get color => this == OrderStatus.pending
       ? AppColors.warning
@@ -61,4 +45,34 @@ extension Ui on OrderStatus {
           : this == OrderStatus.send
               ? AppColors.success
               : AppColors.other;
+}
+
+extension UiProductionStatus on ProductionStatus {
+  Widget getUi() => _container(value, color);
+
+  Color get color => this == ProductionStatus.processing
+      ? AppColors.warning
+      : this == ProductionStatus.done
+          ? AppColors.success
+          : AppColors.other;
+}
+
+Container _container(String value, Color color) {
+  return Container(
+    padding: const EdgeInsets.symmetric(
+      horizontal: 8,
+      vertical: 1,
+    ),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      color: color,
+    ),
+    child: Text(
+      value,
+      style: const TextStyle(
+        fontSize: 10,
+        color: Colors.white,
+      ),
+    ),
+  );
 }

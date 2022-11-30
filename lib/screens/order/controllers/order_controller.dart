@@ -1,14 +1,16 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_manager/config/enums.dart';
 import 'package:my_manager/config/extension.dart';
+import 'package:my_manager/models/designed_sari.dart';
 import 'package:my_manager/models/order.dart';
 import 'package:my_manager/models/ordered_sari.dart';
 import 'package:my_manager/routes.dart';
+import 'package:my_manager/screens/designed_sari/component/designed_raw_sari_title.dart';
 import 'package:my_manager/services/designed_sari_service.dart';
 import 'package:my_manager/services/order_service.dart';
-import 'package:my_manager/services/raw_sari_service.dart';
 import 'package:my_manager/widget/custom_picker.dart';
 
 class OrderController extends GetxController {
@@ -78,39 +80,98 @@ class OrderController extends GetxController {
     if (status == null || status.index <= previousStatus.index) return;
 
     List<OrderedSari> orderedSariList = [];
-    for (var sari in order.sari) {
-      orderedSariList.add(sari);
-    }
-
     List<String> designedSariIdList = [];
     for (var sari in order.sari) {
+      orderedSariList.add(sari);
       designedSariIdList.add(sari.designedSari.id);
     }
+    switch (status) {
+      case OrderStatus.pending:
 
-    List<String> rawSariIdList = [];
-    for (var sari in order.sari) {
-      designedSariIdList.add(sari.designedSari.id);
+        break;
+      case OrderStatus.processing:
+        break;
+      case OrderStatus.send:
+        Map<String, int> inStockDesignedSari =
+            await DesignedSariService().getQuantity(designedSariIdList);
+
+        List<DesignedSari> sarisToProcess = [];
+        for (var element in orderedSariList) {
+          if (element.quantity >
+              (inStockDesignedSari[element.designedSari.id] ?? 0)) {
+            sarisToProcess.add(element.designedSari
+              ..quantity = element.quantity -
+                  (inStockDesignedSari[element.designedSari.id] ?? 0));
+          }
+        }
+        if (sarisToProcess.isEmpty) {
+          order.deliveryDate = DateTime.now();
+          Map<String, int> updatedQuantity = {};
+          for (var element in orderedSariList) {
+            updatedQuantity[element.designedSari.id] =
+                inStockDesignedSari[element.designedSari.id]! -
+                    element.quantity;
+          }
+          await DesignedSariService().updateQuantity(updatedQuantity);
+        } else {
+          _showDialogWithRequiredDesignedProductList(sarisToProcess);
+          return;
+        }
+        break;
+      case OrderStatus.canceled:
+        break;
     }
 
     order.status = status;
-    switch (status) {
-      case OrderStatus.pending:
-        break;
-      case OrderStatus.processing:
-        Map<String, int> inStock =
-            await RawSariService().getQuantity(rawSariIdList);
-        break;
-      case OrderStatus.ready:
-        Map<String, int> inStock =
-            await DesignedSariService().getQuantity(designedSariIdList);
-        break;
-      case OrderStatus.send:
-        order.deliveryDate = DateTime.now();
-        break;
-      case OrderStatus.canceled:
-        // TODO: Handle this case.
-        break;
-    }
-    OrderService().updateOrder(order);
+    OrderService().addEditOrder(order);
+  }
+
+  void _showDialogWithRequiredDesignedProductList(
+    List<DesignedSari> sarisToProcess,
+  ) {
+    Get.bottomSheet(
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: Color(0xffE0E0E0), width: 1),
+                ),
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 16,
+              ),
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: const [
+                  Text(
+                    "নিচের শাড়ি গুলো আগে রেডি করুণ",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Spacer(),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                itemCount: sarisToProcess.length,
+                itemBuilder: (context, index) =>
+                    DesignedSariTile(sari: sarisToProcess[index]),
+              ),
+            )
+          ],
+        ),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(8),
+          ),
+        ),
+        backgroundColor: Get.theme.scaffoldBackgroundColor);
   }
 }

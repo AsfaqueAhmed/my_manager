@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_manager/screens/designed_sari/views/designed_sari_view.dart';
 import 'package:my_manager/screens/order/views/order_view.dart';
+import 'package:my_manager/screens/production/views/production_view.dart';
 import 'package:my_manager/screens/raw_sari/views/raw_sari_view.dart';
 import 'package:my_manager/screens/supply/views/supply_view.dart';
 
@@ -47,7 +48,7 @@ class HomeView extends GetView<HomeController> {
                         ? RawSariView()
                         : controller.currentIndex.value == 3
                             ? SupplyView()
-                            : Container(),
+                            : ProductionView(),
           ),
         ),
         bottomNavigationBar: _bottomBar(),
